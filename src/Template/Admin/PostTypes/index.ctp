@@ -1,5 +1,5 @@
 <?php
-$fields = $postType['fields'];
+$fields = $postType['tableFields'];
 ?>
 
 <div class="actions columns large-2 medium-3">
@@ -18,8 +18,6 @@ $fields = $postType['fields'];
                         <th><?= $this->Paginator->sort($name) ?></th>
                     <?php endif; ?>
                 <?php endforeach; ?>
-                <th><?= $this->Paginator->sort('created') ?></th>
-                <th><?= $this->Paginator->sort('modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -28,12 +26,9 @@ $fields = $postType['fields'];
                 <tr>
                     <?php foreach ($fields as $name => $options) : ?>
                         <?php if (!$options['hide']) : ?>
-                            <td><?= $type->get($name) ?></td>
+                            <td><?= $type->get(($options['get'] ? $options['get'] : $name )) ?></td>
                         <?php endif; ?>
                     <?php endforeach; ?>
-
-                    <td><?= h($type->created) ?></td>
-                    <td><?= h($type->modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $postType['name'], $type->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $postType['name'], $type->id]) ?>

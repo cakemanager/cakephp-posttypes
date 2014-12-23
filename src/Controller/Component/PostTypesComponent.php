@@ -22,8 +22,13 @@ class PostTypesComponent extends Component
      * @var array
      */
     protected $_defaultConfig = [
-        'fieldOptions' => [
+        'formFieldOptions' => [
+        ],
+        'listFieldOptions' => [
             'hide' => false,
+            'get' => false,
+            'before' => '',
+            'after' => '',
         ]
     ];
     protected static $_postTypes = [];
@@ -48,11 +53,12 @@ class PostTypesComponent extends Component
     public function register($name, $options = []) {
 
         $_options = [
-            'menu'   => false,
-            'model'  => ucfirst($name),
-            'fields' => false,
-            'alias'  => $name,
-            'name'   => ucfirst($name),
+            'menu'       => false,
+            'model'      => ucfirst($name),
+            'tableFields' => false,
+            'formFields' => false,
+            'alias'      => $name,
+            'name'       => ucfirst($name),
         ];
 
         $name = ucfirst($name);
@@ -60,8 +66,13 @@ class PostTypesComponent extends Component
         $options = array_merge($_options, $options);
 
         // We have to map the fields-array if it's not false
-        if ($options['fields']) {
-            $options['fields'] = $this->_mapFields($options['fields']);
+        if ($options['tableFields']) {
+            $options['tableFields'] = $this->maptableFields($options['tableFields']);
+        }
+
+        // We have to map the fields-array if it's not false
+        if ($options['formFields']) {
+            $options['formFields'] = $this->mapFormFields($options['formFields']);
         }
 
         // Adding menu-items if set
@@ -106,13 +117,43 @@ class PostTypesComponent extends Component
         return false;
     }
 
-    protected function _mapFields($fields) {
+    /**
+     * Maps the given list-field-list
+     * @param type $name
+     * @param type $options
+     */
+    public function maptableFields($fields) {
 
         $_fields = [];
 
         foreach ($fields as $key => $options) {
 
-            $_options = $this->config('fieldOptions');
+            $_options = $this->config('listFieldOptions');
+
+            if (is_array($options)) {
+
+                $_fields[$key] = array_merge($_options, $options);
+            } else {
+
+                $_fields[$options] = $_options;
+            }
+        }
+
+        return $_fields;
+    }
+
+    /**
+     * Maps the given form-field-list
+     * @param type $fields
+     * @return type
+     */
+    public function mapFormFields($fields) {
+
+        $_fields = [];
+
+        foreach ($fields as $key => $options) {
+
+            $_options = $this->config('formFieldOptions');
 
             if (is_array($options)) {
 
@@ -128,7 +169,7 @@ class PostTypesComponent extends Component
 
     protected function _addMenu($name, $options) {
 
-        if ($this->Controller->request->params['prefix'] == 'admin') {
+        if (key_exists('prefix', $this->Controller->request->params) AND $this->Controller->request->params['prefix'] == 'admin') {
             $this->Controller->Menu->add($options['alias'], [
                 'url' => [
                     'prefix'     => 'admin',

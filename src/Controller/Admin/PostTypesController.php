@@ -17,26 +17,42 @@ class PostTypesController extends AppController
     public function beforeFilter(\Cake\Event\Event $event) {
         parent::beforeFilter($event);
 
+        // get the type-string
         $type = $this->request->params['pass'][0];
 
+        // check if the string exists
         $check = $this->PostTypes->check($type);
 
         if (!$check) {
             throw new \Exception("The PostType is not known");
         }
 
+        // nothing happened so lets get the settings
         $this->Settings = $this->PostTypes->get($type);
 
+        // lets initialize the model too
         $this->Types = $this->loadModel($this->Settings['model']);
 
-        if(!$this->Settings['fields']) {
-            $this->Settings['fields'] = $this->doCallback('postTypeFields');
+        // get the fieldlist from the model if not set
+        if (!$this->Settings['formFields']) {
+            $this->Settings['formFields'] = $this->PostTypes->mapFormFields($this->doCallback('postTypeFormFields'));
         }
 
+        // get the fieldlist from the model if not set
+        if (!$this->Settings['tableFields']) {
+            $this->Settings['tableFields'] = $this->PostTypes->maptableFields($this->doCallback('postTypetableFields'));
+        }
 
+        // first callback: beforeFilter
         $this->doCallBack('beforeFilter');
     }
 
+    /**
+     * This method fires the given callback to the current model if it's set
+     *
+     * @param string $method_name
+     * @return mixed from the callback
+     */
     protected function doCallback($method_name) {
 
         $check = method_exists($this->Types, $method_name);

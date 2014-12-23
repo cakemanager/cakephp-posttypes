@@ -12,3 +12,6 @@ Router::prefix('admin', function ($routes) {
 Router::plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {
     $routes->fallbacks('InflectedRoute');
 });
+
+Router::connect('/blabla/:action/**', ['plugin' => 'PostTypes', 'prefix' => 'admin', 'controller' => 'PostTypes']);
+
