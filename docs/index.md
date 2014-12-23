@@ -8,7 +8,7 @@ The PostTypes-plugin is an easy extention on the CakeManager. By registrating a 
 
 Get the code
 -------------
-The `source <http://github.com/bobmulder/cakephp-posttypes>`_ is available on Github.
+The [source (http://github.com/bobmulder/cakephp-posttypes)](http://github.com/bobmulder/cakephp-posttypes) is available on Github.
 
 Contents
 --------
