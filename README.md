@@ -7,4 +7,4 @@ Documentation
 -------------
 [Read The Docs (Latest)](http://cakephp-posttypes.readthedocs.org/en/latest/)
 
-[Read The Docs (Develop)](http://cakephp-posttypes.readthedocs.org/en/develop/)
+[Read The Docs (Inc Develop)](http://cakephp-posttypes.readthedocs.org/en/docs/)
