@@ -12,8 +12,13 @@ The `source <http://github.com/bobmulder/cakephp-posttypes>`_ is available on Gi
 
 Contents
 --------
-- Installation
-- Component
+
+.. toctree::
+   :maxdepth: 2
+   :glob:
+
+    installation
+    component
 
 To Do
 -----
