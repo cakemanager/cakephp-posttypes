@@ -8,7 +8,12 @@ $fields = $postType['tableFields'];
         <?= $this->Menu->menu('main') ?>
     </ul>
 </div>
-<div class="bookmarks index large-10 medium-9 columns">
+<div class="actions index large-10 medium-9 columns" style="border-left: 0px">
+
+    <h3><?= $postType['alias'] ?></h3>
+
+    <?= $this->Html->link('New '.$postType['type'], ['action' => 'add', $postType['name']]) ?>
+
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -26,7 +31,7 @@ $fields = $postType['tableFields'];
                 <tr>
                     <?php foreach ($fields as $name => $options) : ?>
                         <?php if (!$options['hide']) : ?>
-                            <td><?= $type->get(($options['get'] ? $options['get'] : $name )) ?></td>
+                            <td><?= $type->{(($options['get'] ? $options['get'] : $name))} ?></td>
                         <?php endif; ?>
                     <?php endforeach; ?>
                     <td class="actions">
@@ -50,5 +55,5 @@ $fields = $postType['tableFields'];
 </div>
 
 <?php
-debug($types);
+//debug($types);
 ?>

@@ -1,7 +1,7 @@
 <?php
-debug($postType);
+//debug($postType);
 
-$fields = $postType['fields'];
+$fields = $postType['formFields'];
 ?>
 
 <div class="actions columns large-2 medium-3">
@@ -18,7 +18,7 @@ $fields = $postType['fields'];
         foreach ($fields as $field => $options) {
 
             echo $this->Form->input($field, $options);
-            
+
         }
         ?>
     </fieldset>

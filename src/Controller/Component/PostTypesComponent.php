@@ -3,6 +3,7 @@
 namespace PostTypes\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Utility\Inflector;
 
 /**
  * PostTypes component
@@ -25,10 +26,10 @@ class PostTypesComponent extends Component
         'formFieldOptions' => [
         ],
         'listFieldOptions' => [
-            'hide' => false,
-            'get' => false,
+            'hide'   => false,
+            'get'    => false,
             'before' => '',
-            'after' => '',
+            'after'  => '',
         ]
     ];
     protected static $_postTypes = [];
@@ -53,12 +54,14 @@ class PostTypesComponent extends Component
     public function register($name, $options = []) {
 
         $_options = [
-            'menu'       => false,
-            'model'      => ucfirst($name),
+            'menu'        => false,
+            'model'       => ucfirst($name),
+            'contain'     => [],
             'tableFields' => false,
-            'formFields' => false,
-            'alias'      => $name,
-            'name'       => ucfirst($name),
+            'formFields'  => false,
+            'alias'       => $name,
+            'name'        => ucfirst($name),
+            'type'        => Inflector::singularize(ucfirst($name)),
         ];
 
         $name = ucfirst($name);
