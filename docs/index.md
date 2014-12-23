@@ -13,6 +13,14 @@ The [source (http://github.com/bobmulder/cakephp-posttypes)](http://github.com/b
 Contents
 --------
 
+Branches
+--------
+
+**master** is our master-branche. This will be the latest version and latest documentation.
+
+**develop** will be used to develop. Warning; this branche may contain non-stable code.
+
+**docs** is a sub-branche of the develop-branche. This branche will be used for documentation (RTD). This is cleaner for the develop-branche (we don't want 10 pull-requests...)
 
 To Do
 -----
