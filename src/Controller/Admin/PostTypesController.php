@@ -43,6 +43,10 @@ class PostTypesController extends AppController
             $this->Settings['tableFields'] = $this->PostTypes->maptableFields($this->doCallback('postTypetableFields'));
         }
 
+        // setting up the authorized-configuration
+        $this->IsAuthorized->config('model', 'Types');
+        $this->IsAuthorized->config('param', 1);
+
         // first callback: beforeFilter
         $this->doCallBack('beforeFilter');
     }
@@ -109,7 +113,7 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add($type) {
+    public function add($_type) {
         $this->doCallback('beforeAdd');
 
         $type = $this->Types->newEntity($this->request->data);
@@ -117,7 +121,7 @@ class PostTypesController extends AppController
             debug($this->request->data);
             if ($this->Types->save($type)) {
                 $this->Flash->success('The post type has been saved.');
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index', $_type]);
             } else {
                 $this->Flash->error('The post type could not be saved. Please, try again.');
             }
