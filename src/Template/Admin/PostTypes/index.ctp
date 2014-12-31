@@ -15,7 +15,7 @@ $fields = $postType['tableFields'];
 
     <h3><?= $postType['alias'] ?></h3>
 
-    <?= $this->Html->link('New ' . $postType['type'], ['action' => 'add', $postType['name']]) ?>
+    <?= $this->Html->link('New ' . $postType['type'], ['action' => 'add', 'type' => $postType['name']]) ?>
 
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -42,9 +42,9 @@ $fields = $postType['tableFields'];
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $postType['name'], $type->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $postType['name'], $type->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $postType['name'], $type->id], ['confirm' => __('Are you sure you want to delete # {0}?', $type->id)]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', 'type' => $postType['name'], $type->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', 'type' => $postType['name'], $type->id]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', 'type' => $postType['name'], $type->id], ['confirm' => __('Are you sure you want to delete # {0}?', $type->id)]) ?>
                     </td>
                 </tr>
 
