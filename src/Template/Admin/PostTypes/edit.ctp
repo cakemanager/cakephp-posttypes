@@ -13,7 +13,7 @@ $fields = $postType['formFields'];
 <div class="bookmarks form large-10 medium-9 columns">
     <?= $this->Form->create($type); ?>
     <fieldset>
-        <legend><?= __('Add '.$postType['alias']) ?></legend>
+        <legend><?= __('Edit '.$postType['alias']) ?></legend>
         <?php
         foreach ($fields as $field => $options) {
 

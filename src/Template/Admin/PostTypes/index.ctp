@@ -1,4 +1,7 @@
 <?php
+
+use Cake\Utility\Hash;
+
 $fields = $postType['tableFields'];
 ?>
 
@@ -12,7 +15,7 @@ $fields = $postType['tableFields'];
 
     <h3><?= $postType['alias'] ?></h3>
 
-    <?= $this->Html->link('New '.$postType['type'], ['action' => 'add', $postType['name']]) ?>
+    <?= $this->Html->link('New ' . $postType['type'], ['action' => 'add', $postType['name']]) ?>
 
     <table cellpadding="0" cellspacing="0">
         <thead>
@@ -31,23 +34,27 @@ $fields = $postType['tableFields'];
                 <tr>
                     <?php foreach ($fields as $name => $options) : ?>
                         <?php if (!$options['hide']) : ?>
-                            <td><?= $type->{(($options['get'] ? $options['get'] : $name))} ?></td>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                            <td>
+                                <?=
+                                (($options['get'] ? Hash::get($type->toArray(), $options['get']) : $type->$name));
+                                ?>
+                            </td>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $postType['name'], $type->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $postType['name'], $type->id]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $postType['name'], $type->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $postType['name'], $type->id]) ?>
                         <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $postType['name'], $type->id], ['confirm' => __('Are you sure you want to delete # {0}?', $type->id)]) ?>
                     </td>
                 </tr>
 
-            <?php endforeach; ?>
+<?php endforeach; ?>
         </tbody>
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')); ?>
-            <?= $this->Paginator->numbers(); ?>
+<?= $this->Paginator->prev('< ' . __('previous')); ?>
+<?= $this->Paginator->numbers(); ?>
             <?= $this->Paginator->next(__('next') . ' >'); ?>
         </ul>
         <p><?= $this->Paginator->counter(); ?></p>
