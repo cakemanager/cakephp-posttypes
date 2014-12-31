@@ -178,7 +178,8 @@ class PostTypesComponent extends Component
                     'prefix'     => 'admin',
                     'plugin'     => 'PostTypes',
                     'controller' => 'post_types',
-                    'action'     => 'index', $name
+                    'action'     => 'index',
+                    'type'       => $name,
                 ]
             ]);
         }
