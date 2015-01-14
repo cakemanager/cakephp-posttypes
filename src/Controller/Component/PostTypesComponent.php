@@ -177,12 +177,30 @@ class PostTypesComponent extends Component
                 'url' => [
                     'prefix'     => 'admin',
                     'plugin'     => 'PostTypes',
-                    'controller' => 'post_types',
+                    'controller' => 'PostTypes',
                     'action'     => 'index',
-                    'type'       => $name,
+                    'type'       => lcfirst($name),
                 ]
             ]);
         }
+    }
+
+    /**
+     * Tries to get the posttype from the url.
+     *
+     * @param string $request
+     * @return string
+     */
+    public function postTypeFinder($request) {
+
+        if(key_exists('type', $request->query)) {
+            return $request->query['type'];
+        }
+        if(key_exists(0, $request->params['pass'])) {
+            return $request->params['pass'][0];
+        }
+        return '';
+
     }
 
 }

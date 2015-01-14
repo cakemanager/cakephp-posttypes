@@ -32,7 +32,7 @@ class PostTypesController extends AppController
         parent::beforeFilter($event);
 
         // get the type-string
-        $this->type = $this->request->query['type'];
+        $this->type = $this->PostTypes->postTypeFinder($this->request);
 
         // check if the string exists
         $check = $this->PostTypes->check($this->type);
@@ -91,7 +91,7 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function index() {
+    public function index($posttype = null) {
 
         $this->doCallback('beforeIndex');
 
@@ -109,7 +109,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function view($id = null) {
+    public function view($posttype = null, $id = null) {
 
         $this->doCallback('beforeView');
 
@@ -126,7 +126,7 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add() {
+    public function add($posttype = null) {
         $this->doCallback('beforeAdd');
 
         $type = $this->Types->newEntity($this->request->data);
@@ -151,7 +151,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function edit($id = null) {
+    public function edit($posttype = null, $id = null) {
 
         $this->doCallback('beforeEdit');
 
@@ -179,7 +179,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function delete($id = null) {
+    public function delete($posttype = null, $id = null) {
 
         $this->doCallback('beforeDelete');
 
