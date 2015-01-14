@@ -1,0 +1,14 @@
+{
+    "name": "cakemanager/cakephp-posttypes",
+    "description": "Plugin for CakePHP 3.x to create easy posttypes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bob Mulder",
+            "email": "bobmulder@outlook.com"
+        }
+    ],
+    "require": {
+        "cakemanager/cakephp-cakemanager": "dev-master"
+    }
+}
