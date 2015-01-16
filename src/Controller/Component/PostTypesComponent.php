@@ -4,6 +4,7 @@ namespace PostTypes\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Utility\Inflector;
+use Cake\Core\Configure;
 
 /**
  * PostTypes component
@@ -32,10 +33,24 @@ class PostTypesComponent extends Component
             'after'  => '',
         ]
     ];
+    protected $Controller = null;
+
+    /**
+     *
+     * @var array list of PostTypes
+     */
     protected static $_postTypes = [];
 
-    public function startup($event) {
+    public function initialize(array $config) {
+        parent::initialize($config);
 
+        $this->Controller = $this->_registry->getController();
+
+    }
+
+    public function beforeFilter($event) {
+
+        $this->_registerFromConfigure();
     }
 
     /**
@@ -193,14 +208,33 @@ class PostTypesComponent extends Component
      */
     public function postTypeFinder($request) {
 
-        if(key_exists('type', $request->query)) {
+        if (key_exists('type', $request->query)) {
             return $request->query['type'];
         }
-        if(key_exists(0, $request->params['pass'])) {
+        if (key_exists(0, $request->params['pass'])) {
             return $request->params['pass'][0];
         }
         return '';
+    }
 
+    /**
+     * This method gets the types from the configure-value PostTypes.register.
+     *
+     * You can add an PostType by:
+     *
+     * Configure::write('PostTypes.Register.MyType', [*settings0*]);
+     */
+    protected function _registerFromConfigure() {
+
+        $configure = Configure::read('PostTypes.Register');
+
+        if (!is_array($configure)) {
+            $configure = [];
+        }
+
+        foreach ($configure as $key => $item) {
+            $this->register($key, $item);
+        }
     }
 
 }

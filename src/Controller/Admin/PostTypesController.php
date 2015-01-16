@@ -95,9 +95,14 @@ class PostTypesController extends AppController
 
         $this->doCallback('beforeIndex');
 
-        $this->set('types', $this->paginate($this->Types, [
-                    'contain' => $this->Settings['contain']
-        ]));
+        $this->paginate = [
+            'limit' => 25,
+            'order' => [
+                'Bookmarks.id' => 'asc'
+            ]
+        ];
+
+        $this->set('types', $this->paginate($this->Types));
 
         $this->doCallback('afterIndex');
     }
@@ -159,8 +164,8 @@ class PostTypesController extends AppController
             'contain' => $this->Settings['contain']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $type = $this->Types->patchEntity($type, $this->request->data);
-            if ($this->Types->save($type)) {
+            $type = $this->Types->patchEntity($type, $this->request->data, ['associated' => ['Metas']]);
+            if ($this->Types->save($type, ['associated' => ['Metas']])) {
                 $this->Flash->success('The post type has been saved.');
                 return $this->redirect(['action' => 'index', 'type' => $this->type]);
             } else {
