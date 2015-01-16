@@ -5,6 +5,7 @@ namespace PostTypes\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Utility\Inflector;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * PostTypes component
@@ -31,7 +32,7 @@ class PostTypesComponent extends Component
             'get'    => false,
             'before' => '',
             'after'  => '',
-        ]
+        ],
     ];
     protected $Controller = null;
 
@@ -45,7 +46,6 @@ class PostTypesComponent extends Component
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
-
     }
 
     public function beforeFilter($event) {
@@ -77,11 +77,17 @@ class PostTypesComponent extends Component
             'alias'       => $name,
             'name'        => ucfirst($name),
             'type'        => Inflector::singularize(ucfirst($name)),
+            'actions'     => [
+                'view'   => true,
+                'edit'   => true,
+                'delete' => true,
+                'add'    => true,
+            ]
         ];
 
         $name = ucfirst($name);
 
-        $options = array_merge($_options, $options);
+        $options = Hash::merge($_options, $options);
 
         // We have to map the fields-array if it's not false
         if ($options['tableFields']) {
@@ -145,14 +151,11 @@ class PostTypesComponent extends Component
         $_fields = [];
 
         foreach ($fields as $key => $options) {
-
             $_options = $this->config('listFieldOptions');
 
             if (is_array($options)) {
-
                 $_fields[$key] = array_merge($_options, $options);
             } else {
-
                 $_fields[$options] = $_options;
             }
         }
@@ -170,14 +173,11 @@ class PostTypesComponent extends Component
         $_fields = [];
 
         foreach ($fields as $key => $options) {
-
             $_options = $this->config('formFieldOptions');
 
             if (is_array($options)) {
-
                 $_fields[$key] = array_merge($_options, $options);
             } else {
-
                 $_fields[$options] = $_options;
             }
         }
