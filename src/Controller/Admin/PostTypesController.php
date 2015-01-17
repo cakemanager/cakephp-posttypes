@@ -34,6 +34,8 @@ class PostTypesController extends AppController
         $this->set('types', $this->paginate($this->Types));
 
         $this->doCallback('afterIndex');
+
+        $this->render($this->Settings['views']['index']);
     }
 
     /**
@@ -53,6 +55,8 @@ class PostTypesController extends AppController
         $this->set('type', $type);
 
         $this->doCallback('afterView');
+
+        $this->render($this->Settings['views']['view']);
     }
 
     /**
@@ -77,6 +81,8 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         $this->doCallback('afterAdd');
+
+        $this->render($this->Settings['views']['add']);
     }
 
     /**
@@ -105,6 +111,8 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         $this->doCallback('afterEdit');
+
+        $this->render($this->Settings['views']['edit']);
     }
 
     /**

@@ -97,6 +97,12 @@ class PostTypesComponent extends Component
                 'afterEdit'           => 'afterEdit',
                 'beforeDelete'        => 'beforeDelete',
                 'afterDelete'         => 'afterDelete',
+            ],
+            'views'       => [
+                'index'        => 'PostTypes./Admin/PostTypes/index',
+                'view'         => 'PostTypes./Admin/PostTypes/view',
+                'add'          => 'PostTypes./Admin/PostTypes/add',
+                'edit'         => 'PostTypes./Admin/PostTypes/edit',
             ]
         ];
 
