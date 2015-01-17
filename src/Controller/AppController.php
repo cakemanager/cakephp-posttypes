@@ -22,7 +22,7 @@ class AppController extends BaseController
 
     /**
      * BeforeFilter Event
-     * 
+     *
      * @param \Cake\Event\Event $event
      * @throws \Exception
      */
@@ -80,7 +80,9 @@ class AppController extends BaseController
      * @param string $method_name
      * @return mixed from the callback
      */
-    protected function doCallback($method_name) {
+    protected function doCallback($callback_name) {
+
+        $method_name = $this->Settings['callbacks'][$callback_name];
 
         $check = method_exists($this->Types, $method_name);
 

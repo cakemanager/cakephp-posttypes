@@ -82,6 +82,21 @@ class PostTypesComponent extends Component
                 'edit'   => true,
                 'delete' => true,
                 'add'    => true,
+            ],
+            'callbacks'   => [
+                'beforeFilter'        => 'beforeFilter',
+                'postTypeFormFields'  => 'postTypeFormFields',
+                'postTypetableFields' => 'postTypetableFields',
+                'beforeIndex'         => 'beforeIndex',
+                'afterIndex'          => 'afterIndex',
+                'beforeView'          => 'beforeView',
+                'afterView'           => 'afterView',
+                'beforeAdd'           => 'beforeAdd',
+                'afterAdd'            => 'afterAdd',
+                'beforeEdit'          => 'beforeEdit',
+                'afterEdit'           => 'afterEdit',
+                'beforeDelete'        => 'beforeDelete',
+                'afterDelete'         => 'afterDelete',
             ]
         ];
 

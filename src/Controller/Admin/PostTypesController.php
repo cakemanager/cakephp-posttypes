@@ -64,9 +64,9 @@ class PostTypesController extends AppController
 
         $this->doCallback('beforeAdd');
 
-        $type = $this->Types->newEntity($this->request->data);
+        $type = $this->Types->newEntity();
         if ($this->request->is('post')) {
-            debug($this->request->data);
+            $type = $this->Types->newEntity($this->request->data);
             if ($this->Types->save($type)) {
                 $this->Flash->success('The post type has been saved.');
                 return $this->redirect(['action' => 'index', 'type' => $this->type]);
