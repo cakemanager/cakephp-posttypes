@@ -3,6 +3,7 @@
 namespace PostTypes\Controller;
 
 use App\Controller\AppController as BaseController;
+use Cake\Utility\Hash;
 
 class AppController extends BaseController
 {
@@ -82,7 +83,7 @@ class AppController extends BaseController
      */
     protected function doCallback($callback_name) {
 
-        $method_name = $this->Settings['callbacks'][$callback_name];
+        $method_name = Hash::get($this->Settings, 'callbacks.'.$callback_name);
 
         $check = method_exists($this->Types, $method_name);
 
