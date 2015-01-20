@@ -59,6 +59,8 @@ class AppController extends BaseController
         // setting up the authorized-configuration
         $this->IsAuthorized->config('model', 'Types');
 
+        $this->IsAuthorized->config('param', 1);
+
         // first callback: beforeFilter
         $this->doCallBack('beforeFilter');
     }
@@ -75,6 +77,23 @@ class AppController extends BaseController
         parent::beforeRender($event);
     }
 
+    public function isAuthorized($user) {
+
+        $this->Authorizer->action('*', function($auth) {
+            $auth->allowRole(null);
+        });
+
+        $this->Authorizer->action(['index', 'view'], function($auth) {
+            $auth->allowRole([1]);
+        });
+
+        $this->Authorizer->action(['edit'], function($auth) {
+            $auth->setRole([1], $this->IsAuthorized->authorize());
+        });
+
+        return $this->Authorizer->authorize();
+    }
+
     /**
      * This method fires the given callback to the current model if it's set
      *
@@ -83,7 +102,7 @@ class AppController extends BaseController
      */
     protected function doCallback($callback_name) {
 
-        $method_name = Hash::get($this->Settings, 'callbacks.'.$callback_name);
+        $method_name = Hash::get($this->Settings, 'callbacks.' . $callback_name);
 
         $check = method_exists($this->Types, $method_name);
 
