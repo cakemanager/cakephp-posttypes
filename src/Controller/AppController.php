@@ -21,27 +21,17 @@ class AppController extends BaseController
      */
     public $type = null;
 
-    /**
-     * BeforeFilter Event
-     *
-     * @param \Cake\Event\Event $event
-     * @throws \Exception
-     */
-    public function beforeFilter(\Cake\Event\Event $event) {
-        parent::beforeFilter($event);
+    public function initialize() {
+        parent::initialize();
 
         // get the type-string
-        $this->type = $this->PostTypes->postTypeFinder($this->request);
+        $type = $this->PostTypes->postTypeFinder($this->request);
 
-        // check if the string exists
-        $check = $this->PostTypes->check($this->type);
+        // check if the string exists. Will throw an exception
+        $this->PostTypes->check($type, ['exception' => true]);
 
-        if (!$check) {
-            throw new \Exception("The PostType is not known");
-        }
-
-        // nothing happened so lets get the settings
-        $this->Settings = $this->PostTypes->get($this->type);
+        // intialize the settings
+        $this->Settings = $this->PostTypes->get($type);
 
         // lets initialize the model too
         $this->Types = $this->loadModel($this->Settings['model']);
@@ -58,10 +48,21 @@ class AppController extends BaseController
 
         // setting up the authorized-configuration
         $this->IsAuthorized->config('model', 'Types');
-
         $this->IsAuthorized->config('param', 1);
 
-        // first callback: beforeFilter
+    }
+
+    /**
+     * BeforeFilter Event
+     *
+     * @param \Cake\Event\Event $event
+     * @throws \Exception
+     */
+    public function beforeFilter(\Cake\Event\Event $event) {
+        parent::beforeFilter($event);
+
+        $this->set('postType', $this->Settings);
+
         $this->doCallBack('beforeFilter');
     }
 
@@ -71,9 +72,6 @@ class AppController extends BaseController
      * @param \Cake\Event\Event $event
      */
     public function beforeRender(\Cake\Event\Event $event) {
-
-        $this->set('postType', $this->Settings);
-
         parent::beforeRender($event);
     }
 
@@ -101,6 +99,17 @@ class AppController extends BaseController
         if ($check) {
             return call_user_method($method_name, $this->Types, $this);
         }
+    }
+
+    /**
+     * Checks if an api is allowed
+     * 
+     * @return type
+     */
+    protected function _apiAllowed() {
+
+        return $this->Settings['api'];
+
     }
 
 }

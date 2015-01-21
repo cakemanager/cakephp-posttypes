@@ -15,19 +15,14 @@ Router::prefix('admin', function ($routes) {
     $routes->fallbacks('InflectedRoute');
 });
 
-Router::prefix('api', function ($routes) {
-    $routes->extensions(['json']);
+Router::prefix('api', function($routes) {
+    $routes->plugin('PostTypes', ['path' => '/types'], function ($routes) {
 
-    $routes->plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {
-
-        // these curls are not working... why :S
-        $routes->connect(
-                '/:type/:action/*', ['controller' => 'PostTypes'], ['pass' => ['type']]
-        );
+        $routes->extensions(['json']);
+        $routes->resources('PostTypes');
 
         $routes->fallbacks('InflectedRoute');
     });
-    $routes->fallbacks('InflectedRoute');
 });
 
 Router::plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {

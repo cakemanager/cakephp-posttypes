@@ -62,6 +62,7 @@ class PostTypesComponent extends Component
      * ### OPTIONS
      * - menu   boolean     set if you want a menu-item for the admin-area
      * - model  string      is the model-name to use
+     * - api    boolean     set if you want an automatically api. default false
      * - fields mixed       use an array to define the fields to use, set to false to use the postTypeFields-method in your table-class
      * - alias  string      the alias
      *
@@ -71,6 +72,7 @@ class PostTypesComponent extends Component
         $_options = [
             'menu'        => false,
             'model'       => ucfirst($name),
+            'api'         => false,
             'contain'     => [],
             'tableFields' => false,
             'formFields'  => false,
@@ -99,10 +101,10 @@ class PostTypesComponent extends Component
                 'afterDelete'         => 'afterDelete',
             ],
             'views'       => [
-                'index'        => 'PostTypes./Admin/PostTypes/index',
-                'view'         => 'PostTypes./Admin/PostTypes/view',
-                'add'          => 'PostTypes./Admin/PostTypes/add',
-                'edit'         => 'PostTypes./Admin/PostTypes/edit',
+                'index' => 'PostTypes./Admin/PostTypes/index',
+                'view'  => 'PostTypes./Admin/PostTypes/view',
+                'add'   => 'PostTypes./Admin/PostTypes/add',
+                'edit'  => 'PostTypes./Admin/PostTypes/edit',
             ]
         ];
 
@@ -138,9 +140,21 @@ class PostTypesComponent extends Component
      * @param string $name of the posttype
      * @return bool if the type exists
      */
-    public function check($name) {
+    public function check($name, $options = []) {
+
+        $_options = [
+            'exception' => false,
+        ];
+
+        $options = array_merge($_options, $options);
 
         $name = ucfirst($name);
+
+        if ($options['exception']) {
+            if (!(key_exists($name, self::$_postTypes))) {
+                throw new \Exception("The PostType is not known");
+            }
+        }
 
         return(key_exists($name, self::$_postTypes));
     }
