@@ -1,5 +1,6 @@
 {
     "name": "cakemanager/cakephp-posttypes",
+    "type": "cakephp-plugin",
     "description": "Plugin for CakePHP 3.x to create easy posttypes",
     "license": "MIT",
     "authors": [
@@ -8,7 +9,12 @@
             "email": "bobmulder@outlook.com"
         }
     ],
-    "require": {
-        "cakemanager/cakephp-cakemanager": "dev-master"
+    "extra": {
+        "installer-name": "PostTypes"
+    },
+    "autoload": {
+        "psr-4": {
+            "PostTypes\\": "src"
+        }
     }
 }
