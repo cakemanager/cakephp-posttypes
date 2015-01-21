@@ -4,6 +4,8 @@ namespace PostTypes\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Utility\Inflector;
+use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * PostTypes component
@@ -30,12 +32,25 @@ class PostTypesComponent extends Component
             'get'    => false,
             'before' => '',
             'after'  => '',
-        ]
+        ],
     ];
+    protected $Controller = null;
+
+    /**
+     *
+     * @var array list of PostTypes
+     */
     protected static $_postTypes = [];
 
-    public function startup($event) {
+    public function initialize(array $config) {
+        parent::initialize($config);
 
+        $this->Controller = $this->_registry->getController();
+    }
+
+    public function beforeFilter($event) {
+
+        $this->_registerFromConfigure();
     }
 
     /**
@@ -62,11 +77,38 @@ class PostTypesComponent extends Component
             'alias'       => $name,
             'name'        => ucfirst($name),
             'type'        => Inflector::singularize(ucfirst($name)),
+            'actions'     => [
+                'view'   => true,
+                'edit'   => true,
+                'delete' => true,
+                'add'    => true,
+            ],
+            'callbacks'   => [
+                'beforeFilter'        => 'beforeFilter',
+                'postTypeFormFields'  => 'postTypeFormFields',
+                'postTypetableFields' => 'postTypetableFields',
+                'beforeIndex'         => 'beforeIndex',
+                'afterIndex'          => 'afterIndex',
+                'beforeView'          => 'beforeView',
+                'afterView'           => 'afterView',
+                'beforeAdd'           => 'beforeAdd',
+                'afterAdd'            => 'afterAdd',
+                'beforeEdit'          => 'beforeEdit',
+                'afterEdit'           => 'afterEdit',
+                'beforeDelete'        => 'beforeDelete',
+                'afterDelete'         => 'afterDelete',
+            ],
+            'views'       => [
+                'index'        => 'PostTypes./Admin/PostTypes/index',
+                'view'         => 'PostTypes./Admin/PostTypes/view',
+                'add'          => 'PostTypes./Admin/PostTypes/add',
+                'edit'         => 'PostTypes./Admin/PostTypes/edit',
+            ]
         ];
 
         $name = ucfirst($name);
 
-        $options = array_merge($_options, $options);
+        $options = Hash::merge($_options, $options);
 
         // We have to map the fields-array if it's not false
         if ($options['tableFields']) {
@@ -130,14 +172,11 @@ class PostTypesComponent extends Component
         $_fields = [];
 
         foreach ($fields as $key => $options) {
-
             $_options = $this->config('listFieldOptions');
 
             if (is_array($options)) {
-
                 $_fields[$key] = array_merge($_options, $options);
             } else {
-
                 $_fields[$options] = $_options;
             }
         }
@@ -155,14 +194,11 @@ class PostTypesComponent extends Component
         $_fields = [];
 
         foreach ($fields as $key => $options) {
-
             $_options = $this->config('formFieldOptions');
 
             if (is_array($options)) {
-
                 $_fields[$key] = array_merge($_options, $options);
             } else {
-
                 $_fields[$options] = $_options;
             }
         }
@@ -177,10 +213,48 @@ class PostTypesComponent extends Component
                 'url' => [
                     'prefix'     => 'admin',
                     'plugin'     => 'PostTypes',
-                    'controller' => 'post_types',
-                    'action'     => 'index', $name
+                    'controller' => 'PostTypes',
+                    'action'     => 'index',
+                    'type'       => lcfirst($name),
                 ]
             ]);
+        }
+    }
+
+    /**
+     * Tries to get the posttype from the url.
+     *
+     * @param string $request
+     * @return string
+     */
+    public function postTypeFinder($request) {
+
+        if (key_exists('type', $request->query)) {
+            return $request->query['type'];
+        }
+        if (key_exists(0, $request->params['pass'])) {
+            return $request->params['pass'][0];
+        }
+        return '';
+    }
+
+    /**
+     * This method gets the types from the configure-value PostTypes.register.
+     *
+     * You can add an PostType by:
+     *
+     * Configure::write('PostTypes.Register.MyType', [*settings0*]);
+     */
+    protected function _registerFromConfigure() {
+
+        $configure = Configure::read('PostTypes.Register');
+
+        if (!is_array($configure)) {
+            $configure = [];
+        }
+
+        foreach ($configure as $key => $item) {
+            $this->register($key, $item);
         }
     }
 

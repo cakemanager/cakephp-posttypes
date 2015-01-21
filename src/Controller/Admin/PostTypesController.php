@@ -3,6 +3,7 @@
 namespace PostTypes\Controller\Admin;
 
 use PostTypes\Controller\AppController;
+use Cake\Routing\Router;
 
 /**
  * PostTypes Controller
@@ -14,75 +15,27 @@ class PostTypesController extends AppController
 
     public $uses = [];
 
-    public function beforeFilter(\Cake\Event\Event $event) {
-        parent::beforeFilter($event);
-
-        // get the type-string
-        $type = $this->request->params['pass'][0];
-
-        // check if the string exists
-        $check = $this->PostTypes->check($type);
-
-        if (!$check) {
-            throw new \Exception("The PostType is not known");
-        }
-
-        // nothing happened so lets get the settings
-        $this->Settings = $this->PostTypes->get($type);
-
-        // lets initialize the model too
-        $this->Types = $this->loadModel($this->Settings['model']);
-
-        // get the fieldlist from the model if not set
-        if (!$this->Settings['formFields']) {
-            $this->Settings['formFields'] = $this->PostTypes->mapFormFields($this->doCallback('postTypeFormFields'));
-        }
-
-        // get the fieldlist from the model if not set
-        if (!$this->Settings['tableFields']) {
-            $this->Settings['tableFields'] = $this->PostTypes->maptableFields($this->doCallback('postTypetableFields'));
-        }
-
-        // first callback: beforeFilter
-        $this->doCallBack('beforeFilter');
-    }
-
-    /**
-     * This method fires the given callback to the current model if it's set
-     *
-     * @param string $method_name
-     * @return mixed from the callback
-     */
-    protected function doCallback($method_name) {
-
-        $check = method_exists($this->Types, $method_name);
-
-        if ($check) {
-            return call_user_method($method_name, $this->Types, $this);
-        }
-    }
-
-    public function beforeRender(\Cake\Event\Event $event) {
-
-        $this->set('postType', $this->Settings);
-
-        parent::beforeRender($event);
-    }
-
     /**
      * Index method
      *
      * @return void
      */
-    public function index($type) {
+    public function index($posttype = null) {
 
         $this->doCallback('beforeIndex');
 
-        $this->set('types', $this->paginate($this->Types, [
-            'contain' => $this->Settings['contain']
-        ]));
+        $this->paginate = [
+            'limit' => 25,
+            'order' => [
+                'Bookmarks.id' => 'asc'
+            ]
+        ];
+
+        $this->set('types', $this->paginate($this->Types));
 
         $this->doCallback('afterIndex');
+
+        $this->render($this->Settings['views']['index']);
     }
 
     /**
@@ -92,7 +45,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function view($type, $id = null) {
+    public function view($posttype = null, $id = null) {
 
         $this->doCallback('beforeView');
 
@@ -102,6 +55,8 @@ class PostTypesController extends AppController
         $this->set('type', $type);
 
         $this->doCallback('afterView');
+
+        $this->render($this->Settings['views']['view']);
     }
 
     /**
@@ -109,15 +64,16 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add($type) {
+    public function add($posttype = null) {
+
         $this->doCallback('beforeAdd');
 
-        $type = $this->Types->newEntity($this->request->data);
+        $type = $this->Types->newEntity();
         if ($this->request->is('post')) {
-            debug($this->request->data);
+            $type = $this->Types->newEntity($this->request->data);
             if ($this->Types->save($type)) {
                 $this->Flash->success('The post type has been saved.');
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index', 'type' => $this->type]);
             } else {
                 $this->Flash->error('The post type could not be saved. Please, try again.');
             }
@@ -125,6 +81,8 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         $this->doCallback('afterAdd');
+
+        $this->render($this->Settings['views']['add']);
     }
 
     /**
@@ -134,7 +92,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function edit($_type, $id = null) {
+    public function edit($posttype = null, $id = null) {
 
         $this->doCallback('beforeEdit');
 
@@ -142,10 +100,10 @@ class PostTypesController extends AppController
             'contain' => $this->Settings['contain']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $type = $this->Types->patchEntity($type, $this->request->data);
-            if ($this->Types->save($type)) {
+            $type = $this->Types->patchEntity($type, $this->request->data, ['associated' => ['Metas']]);
+            if ($this->Types->save($type, ['associated' => ['Metas']])) {
                 $this->Flash->success('The post type has been saved.');
-                return $this->redirect(['action' => 'index', $_type]);
+                return $this->redirect(['action' => 'index', 'type' => $this->type]);
             } else {
                 $this->Flash->error('The type could not be saved. Please, try again.');
             }
@@ -153,6 +111,8 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         $this->doCallback('afterEdit');
+
+        $this->render($this->Settings['views']['edit']);
     }
 
     /**
@@ -162,7 +122,7 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function delete($type, $id = null) {
+    public function delete($posttype = null, $id = null) {
 
         $this->doCallback('beforeDelete');
 
@@ -170,13 +130,13 @@ class PostTypesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         if ($this->Types->delete($postType)) {
             $this->Flash->success('The post type has been deleted.');
+            return $this->redirect(['action' => 'index', 'type' => $this->type]);
         } else {
             $this->Flash->error('The post type could not be deleted. Please, try again.');
+            return $this->redirect(['action' => 'index', 'type' => $this->type]);
         }
 
         $this->doCallback('afterDelete');
-
-        return $this->redirect(['action' => 'index', $type]);
     }
 
 }
