@@ -86,7 +86,7 @@ class PostTypesComponent extends Component
             'callbacks'   => [
                 'beforeFilter'        => 'beforeFilter',
                 'postTypeFormFields'  => 'postTypeFormFields',
-                'postTypetableFields' => 'postTypetableFields',
+                'postTypeTableFields' => 'postTypeTableFields',
                 'beforeIndex'         => 'beforeIndex',
                 'afterIndex'          => 'afterIndex',
                 'beforeView'          => 'beforeView',
