@@ -80,15 +80,7 @@ class AppController extends BaseController
     public function isAuthorized($user) {
 
         $this->Authorizer->action('*', function($auth) {
-            $auth->allowRole(null);
-        });
-
-        $this->Authorizer->action(['index', 'view'], function($auth) {
             $auth->allowRole([1]);
-        });
-
-        $this->Authorizer->action(['edit'], function($auth) {
-            $auth->setRole([1], $this->IsAuthorized->authorize());
         });
 
         return $this->Authorizer->authorize();
