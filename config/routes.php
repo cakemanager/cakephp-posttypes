@@ -5,7 +5,6 @@ use Cake\Routing\Router;
 Router::prefix('admin', function ($routes) {
     $routes->plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {
 
-        // these curls are not working... why :S
         $routes->connect(
                 '/:type/:action/*', ['controller' => 'PostTypes'], ['pass' => ['type']]
         );
@@ -16,9 +15,13 @@ Router::prefix('admin', function ($routes) {
 });
 
 Router::prefix('api', function($routes) {
-    $routes->plugin('PostTypes', ['path' => '/types'], function ($routes) {
-
+    $routes->plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {
         $routes->extensions(['json']);
+
+        $routes->connect(
+                '/:type/:action/*', ['controller' => 'PostTypes'], ['pass' => ['type']]
+        );
+
         $routes->resources('PostTypes');
 
         $routes->fallbacks('InflectedRoute');
