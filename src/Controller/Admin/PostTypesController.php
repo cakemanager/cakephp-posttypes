@@ -4,6 +4,7 @@ namespace PostTypes\Controller\Admin;
 
 use PostTypes\Controller\AppController;
 use Cake\Routing\Router;
+use Cake\Event\Event;
 
 /**
  * PostTypes Controller
@@ -15,25 +16,45 @@ class PostTypesController extends AppController
 
     public $uses = [];
 
+    public function isAuthorized($user) {
+
+        $this->Authorizer->action('*', function($auth) {
+            $auth->allowRole(1);
+        });
+
+        // setting up an event for the index
+        $_event = new Event('Controller.PostTypes.isAuthorized.' . $this->_type, $this, [
+        ]);
+        $this->eventManager()->dispatch($_event);
+
+        return $this->Authorizer->authorize();
+    }
+
     /**
      * Index method
      *
      * @return void
      */
-    public function index($posttype = null) {
+    public function index($type = null) {
 
-        $this->doCallback('beforeIndex');
+        // setting up an event for the index
+        $_event = new Event('Controller.PostTypes.beforeIndex.' . $type, $this, [
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $this->paginate = [
             'limit' => 25,
             'order' => [
-                'Bookmarks.id' => 'asc'
+                ucfirst($type) . '.id' => 'asc'
             ]
         ];
 
         $this->set('types', $this->paginate($this->Types));
 
-        $this->doCallback('afterIndex');
+        // setting up an event for the index
+        $_event = new Event('Controller.PostTypes.afterIndex.' . $type, $this, [
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $this->render($this->Settings['views']['index']);
     }
@@ -45,16 +66,24 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function view($posttype = null, $id = null) {
+    public function view($type = null, $id = null) {
 
-        $this->doCallback('beforeView');
+        // setting up an event for the view
+        $_event = new Event('Controller.PostTypes.beforeView.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $type = $this->Types->get($id, [
             'contain' => $this->Settings['contain']
         ]);
         $this->set('type', $type);
 
-        $this->doCallback('afterView');
+        // setting up an event for the view
+        $_event = new Event('Controller.PostTypes.afterView.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $this->render($this->Settings['views']['view']);
     }
@@ -64,9 +93,12 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add($posttype = null) {
+    public function add($type = null) {
 
-        $this->doCallback('beforeAdd');
+        // setting up an event for the add
+        $_event = new Event('Controller.PostTypes.beforeAdd.' . $type, $this, [
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $type = $this->Types->newEntity();
         if ($this->request->is('post')) {
@@ -80,7 +112,10 @@ class PostTypesController extends AppController
         }
         $this->set(compact('type'));
 
-        $this->doCallback('afterAdd');
+        // setting up an event for the add
+        $_event = new Event('Controller.PostTypes.afterAdd.' . $type, $this, [
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $this->render($this->Settings['views']['add']);
     }
@@ -92,9 +127,13 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function edit($posttype = null, $id = null) {
+    public function edit($type = null, $id = null) {
 
-        $this->doCallback('beforeEdit');
+        // setting up an event for the edit
+        $_event = new Event('Controller.PostTypes.beforeEdit.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $type = $this->Types->get($id, [
             'contain' => $this->Settings['contain']
@@ -110,7 +149,11 @@ class PostTypesController extends AppController
         }
         $this->set(compact('type'));
 
-        $this->doCallback('afterEdit');
+        // setting up an event for the edit
+        $_event = new Event('Controller.PostTypes.afterEdit.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $this->render($this->Settings['views']['edit']);
     }
@@ -122,9 +165,13 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function delete($posttype = null, $id = null) {
+    public function delete($type = null, $id = null) {
 
-        $this->doCallback('beforeDelete');
+        // setting up an event for the delete
+        $_event = new Event('Controller.PostTypes.beforeDelete.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
 
         $postType = $this->Types->get($id);
         $this->request->allowMethod(['post', 'delete']);
@@ -136,7 +183,11 @@ class PostTypesController extends AppController
             return $this->redirect(['action' => 'index', 'type' => $this->type]);
         }
 
-        $this->doCallback('afterDelete');
+        // setting up an event for the delete
+        $_event = new Event('Controller.PostTypes.afterDelete.' . $type, $this, [
+            'id' => $id,
+        ]);
+        $this->eventManager()->dispatch($_event);
     }
 
 }

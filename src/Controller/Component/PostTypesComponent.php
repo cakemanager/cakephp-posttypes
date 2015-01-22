@@ -46,9 +46,6 @@ class PostTypesComponent extends Component
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
-    }
-
-    public function beforeFilter($event) {
 
         $this->_registerFromConfigure();
     }
@@ -74,8 +71,8 @@ class PostTypesComponent extends Component
             'model'       => ucfirst($name),
             'api'         => false,
             'contain'     => [],
-            'tableFields' => false,
-            'formFields'  => false,
+            'tableFields' => [],
+            'formFields'  => [],
             'alias'       => $name,
             'name'        => ucfirst($name),
             'type'        => Inflector::singularize(ucfirst($name)),
@@ -84,21 +81,6 @@ class PostTypesComponent extends Component
                 'edit'   => true,
                 'delete' => true,
                 'add'    => true,
-            ],
-            'callbacks'   => [
-                'beforeFilter'        => 'beforeFilter',
-                'postTypeFormFields'  => 'postTypeFormFields',
-                'postTypeTableFields' => 'postTypeTableFields',
-                'beforeIndex'         => 'beforeIndex',
-                'afterIndex'          => 'afterIndex',
-                'beforeView'          => 'beforeView',
-                'afterView'           => 'afterView',
-                'beforeAdd'           => 'beforeAdd',
-                'afterAdd'            => 'afterAdd',
-                'beforeEdit'          => 'beforeEdit',
-                'afterEdit'           => 'afterEdit',
-                'beforeDelete'        => 'beforeDelete',
-                'afterDelete'         => 'afterDelete',
             ],
             'views'       => [
                 'index' => 'PostTypes./Admin/PostTypes/index',
