@@ -6,14 +6,6 @@ $fields = $postType['tableFields'];
 
 ?>
 
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <?= $this->Menu->menu('main') ?>
-    </ul>
-</div>
-<div class="actions index large-10 medium-9 columns" style="border-left: 0px">
-
     <h3><?= $postType['alias'] ?></h3>
 
     <?= ((!Hash::get($postType, 'actions.add')) ? '' : $this->Html->link('New ' . $postType['type'], ['action' => 'add', 'type' => lcfirst($postType['name'])])) ?>
@@ -60,7 +52,6 @@ $fields = $postType['tableFields'];
         </ul>
         <p><?= $this->Paginator->counter(); ?></p>
     </div>
-</div>
 
 <?php
 //debug($types);
