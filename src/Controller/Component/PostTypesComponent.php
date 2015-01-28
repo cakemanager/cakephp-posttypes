@@ -83,10 +83,10 @@ class PostTypesComponent extends Component
                 'add'    => true,
             ],
             'views'       => [
-                'index' => 'PostTypes./Admin/PostTypes/index',
-                'view'  => 'PostTypes./Admin/PostTypes/view',
-                'add'   => 'PostTypes./Admin/PostTypes/add',
-                'edit'  => 'PostTypes./Admin/PostTypes/edit',
+                'index' => false,
+                'view'  => false,
+                'add'   => false,
+                'edit'  => false,
             ]
         ];
 

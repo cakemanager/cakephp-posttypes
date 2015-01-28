@@ -5,6 +5,7 @@ namespace PostTypes\Controller\Admin;
 use PostTypes\Controller\AppController;
 use Cake\Routing\Router;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 
 /**
  * PostTypes Controller
@@ -56,6 +57,12 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
+
+        if (!$this->Settings['views']['index']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.index'));
+            return;
+        }
+
         $this->render($this->Settings['views']['index']);
     }
 
@@ -84,6 +91,11 @@ class PostTypesController extends AppController
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
+
+        if (!$this->Settings['views']['view']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.view'));
+            return;
+        }
 
         $this->render($this->Settings['views']['view']);
     }
@@ -117,7 +129,12 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $this->render($this->Settings['views']['add']);
+        if (!$this->Settings['views']['view']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.view'));
+            return;
+        }
+
+        $this->render($this->Settings['views']['view']);
     }
 
     /**
@@ -155,7 +172,12 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $this->render($this->Settings['views']['edit']);
+        if (!$this->Settings['views']['view']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.view'));
+            return;
+        }
+
+        $this->render($this->Settings['views']['view']);
     }
 
     /**
