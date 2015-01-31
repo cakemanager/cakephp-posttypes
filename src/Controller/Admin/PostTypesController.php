@@ -134,7 +134,7 @@ class PostTypesController extends AppController
             return;
         }
 
-        $this->render($this->Settings['views']['view']);
+        $this->render($this->Settings['views']['add']);
     }
 
     /**
@@ -177,7 +177,7 @@ class PostTypesController extends AppController
             return;
         }
 
-        $this->render($this->Settings['views']['view']);
+        $this->render($this->Settings['views']['edit']);
     }
 
     /**
