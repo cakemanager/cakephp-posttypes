@@ -129,8 +129,8 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        if (!$this->Settings['views']['view']) {
-            $this->render(Configure::read('PostTypes.AdminPostTypeViews.view'));
+        if (!$this->Settings['views']['add']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.add'));
             return;
         }
 
@@ -172,8 +172,8 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        if (!$this->Settings['views']['view']) {
-            $this->render(Configure::read('PostTypes.AdminPostTypeViews.view'));
+        if (!$this->Settings['views']['edit']) {
+            $this->render(Configure::read('PostTypes.AdminPostTypeViews.edit'));
             return;
         }
 
