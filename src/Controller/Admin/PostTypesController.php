@@ -105,10 +105,10 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add($type = null) {
+    public function add($_type = null) {
 
         // setting up an event for the add
-        $_event = new Event('Controller.PostTypes.beforeAdd.' . $type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeAdd.' . $_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -117,7 +117,7 @@ class PostTypesController extends AppController
             $type = $this->Types->newEntity($this->request->data);
             if ($this->Types->save($type)) {
                 $this->Flash->success('The post type has been saved.');
-                return $this->redirect(['action' => 'index', 'type' => $this->type]);
+                return $this->redirect(['action' => 'index', 'type' => $_type]);
             } else {
                 $this->Flash->error('The post type could not be saved. Please, try again.');
             }
@@ -125,7 +125,7 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         // setting up an event for the add
-        $_event = new Event('Controller.PostTypes.afterAdd.' . $type, $this, [
+        $_event = new Event('Controller.PostTypes.afterAdd.' . $_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -199,10 +199,10 @@ class PostTypesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         if ($this->Types->delete($postType)) {
             $this->Flash->success('The post type has been deleted.');
-            return $this->redirect(['action' => 'index', 'type' => $this->type]);
+            return $this->redirect(['action' => 'index', 'type' => $type]);
         } else {
             $this->Flash->error('The post type could not be deleted. Please, try again.');
-            return $this->redirect(['action' => 'index', 'type' => $this->type]);
+            return $this->redirect(['action' => 'index', 'type' => $type]);
         }
 
         // setting up an event for the delete
