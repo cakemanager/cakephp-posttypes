@@ -37,10 +37,6 @@ class AppController extends BaseController
         // lets initialize the model too
         $this->Types = $this->loadModel($this->Settings['model']);
 
-        // setting up the authorized-configuration
-        $this->IsAuthorized->config('model', 'Types');
-        $this->IsAuthorized->config('param', 1);
-
     }
 
     /**
