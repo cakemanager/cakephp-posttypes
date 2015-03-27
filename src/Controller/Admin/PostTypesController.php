@@ -72,8 +72,6 @@ class PostTypesController extends AppController
      */
     public function index($type = null)
     {
-        debug($this->Types->schema()->columns());
-
         // setting up an event for the index
         $_event = new Event('Controller.PostTypes.beforeIndex.' . $type, $this, [
         ]);
