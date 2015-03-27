@@ -1,17 +1,31 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace PostTypes\Controller;
 
 use App\Controller\AppController as BaseController;
-use Cake\Utility\Hash;
 
+/**
+ * AppController for PostTypes Plugin
+ *
+ */
 class AppController extends BaseController
 {
-
     /**
      * The current type table
      *
-     * @var type
+     * @var \Cake\ORM\Table
      */
     public $Types = null;
 
@@ -19,88 +33,67 @@ class AppController extends BaseController
      * The current type-name (string)
      * @var string
      */
-    public $type = null;
+    protected $_type = null;
 
     /**
-     * BeforeFilter Event
+     * Initialize
      *
-     * @param \Cake\Event\Event $event
-     * @throws \Exception
+     * @return void
      */
-    public function beforeFilter(\Cake\Event\Event $event) {
-        parent::beforeFilter($event);
+    public function initialize()
+    {
+        parent::initialize();
 
         // get the type-string
-        $this->type = $this->PostTypes->postTypeFinder($this->request);
+        $type = $this->PostTypes->postTypeFinder($this->request);
+        $this->_type = $type;
 
-        // check if the string exists
-        $check = $this->PostTypes->check($this->type);
+        // check if the string exists. Will throw an exception
+        $this->PostTypes->check($type, ['exception' => true]);
 
-        if (!$check) {
-            throw new \Exception("The PostType is not known");
-        }
-
-        // nothing happened so lets get the settings
-        $this->Settings = $this->PostTypes->get($this->type);
+        // intialize the settings
+        $this->Settings = $this->PostTypes->get($type);
 
         // lets initialize the model too
         $this->Types = $this->loadModel($this->Settings['model']);
-
-        // get the fieldlist from the model if not set
-        if (!$this->Settings['formFields']) {
-            $this->Settings['formFields'] = $this->PostTypes->mapFormFields($this->doCallback('postTypeFormFields'));
-        }
-
-        // get the fieldlist from the model if not set
-        if (!$this->Settings['tableFields']) {
-            $this->Settings['tableFields'] = $this->PostTypes->maptableFields($this->doCallback('postTypetableFields'));
-        }
-
-        // setting up the authorized-configuration
-        $this->IsAuthorized->config('model', 'Types');
-
-        $this->IsAuthorized->config('param', 1);
-
-        // first callback: beforeFilter
-        $this->doCallBack('beforeFilter');
     }
 
     /**
-     * BeforeRender Event
+     * beforeFilter
      *
-     * @param \Cake\Event\Event $event
+     * @param \Cake\Event\Event $event Event.
+     * @return void
      */
-    public function beforeRender(\Cake\Event\Event $event) {
-
-        $this->set('postType', $this->Settings);
-
-        parent::beforeRender($event);
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        parent::beforeFilter($event);
     }
 
-    public function isAuthorized($user) {
+    /**
+     * beforeRender
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeRender(\Cake\Event\Event $event)
+    {
+        parent::beforeRender($event);
 
-        $this->Authorizer->action('*', function($auth) {
+        $this->set('postType', $this->Settings);
+    }
+
+    /**
+     * isAuthorized
+     *
+     * @param array $user User.
+     * @return bool
+     */
+    public function isAuthorized($user)
+    {
+        $this->Authorizer->action('*', function ($auth) {
             $auth->allowRole([1]);
         });
 
         return $this->Authorizer->authorize();
     }
-
-    /**
-     * This method fires the given callback to the current model if it's set
-     *
-     * @param string $method_name
-     * @return mixed from the callback
-     */
-    protected function doCallback($callback_name) {
-
-        $method_name = Hash::get($this->Settings, 'callbacks.' . $callback_name);
-
-        $check = method_exists($this->Types, $method_name);
-
-        if ($check) {
-            return call_user_method($method_name, $this->Types, $this);
-        }
-    }
-
 }
