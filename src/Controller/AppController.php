@@ -27,7 +27,7 @@ class AppController extends BaseController
      *
      * @var \Cake\ORM\Table
      */
-    public $Types = null;
+    public $Model = null;
 
     /**
      * The current type-name (string)
@@ -55,7 +55,7 @@ class AppController extends BaseController
         $this->Settings = $this->PostTypes->get($type);
 
         // lets initialize the model too
-        $this->Types = $this->loadModel($this->Settings['model']);
+        $this->Model = $this->loadModel($this->Settings['model']);
     }
 
     /**

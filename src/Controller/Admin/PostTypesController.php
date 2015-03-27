@@ -88,7 +88,7 @@ class PostTypesController extends AppController
             $this->Search->addFilter($filter);
         }
 
-        $query = $this->Search->search($this->Types->find('all'));
+        $query = $this->Search->search($this->Model->find('all'));
 
         $this->set('types', $this->paginate($query));
 
@@ -121,7 +121,7 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $type = $this->Types->get($id, [
+        $type = $this->Model->get($id, [
             'contain' => $this->Settings['contain']
         ]);
         $this->set('type', $type);
@@ -149,7 +149,7 @@ class PostTypesController extends AppController
     public function add($_type = null)
     {
         if (empty($this->Settings['formFields'])) {
-            $columns = $this->Types->schema()->columns();
+            $columns = $this->Model->schema()->columns();
             $filter = Configure::read('PostTypes.FilteredColumns');
             foreach ($columns as $column) {
                 if (!in_array($column, $filter)) {
@@ -163,10 +163,10 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $type = $this->Types->newEntity();
+        $type = $this->Model->newEntity();
         if ($this->request->is('post')) {
-            $type = $this->Types->newEntity($this->request->data);
-            if ($this->Types->save($type)) {
+            $type = $this->Model->newEntity($this->request->data);
+            if ($this->Model->save($type)) {
                 $this->Flash->success('The post type has been saved.');
                 return $this->redirect(['action' => 'index', 'type' => $_type]);
             } else {
@@ -204,14 +204,14 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $type = $this->Types->get($id, [
+        $type = $this->Model->get($id, [
             'contain' => $this->Settings['contain']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $type = $this->Types->patchEntity($type, $this->request->data);
-            if ($this->Types->save($type)) {
+            $type = $this->Model->patchEntity($type, $this->request->data);
+            if ($this->Model->save($type)) {
                 $this->Flash->success('The post type has been saved.');
-                return $this->redirect(['action' => 'index', 'type' => $this->type]);
+                return $this->redirect(['action' => 'index', 'type' => $_type]);
             } else {
                 $this->Flash->error('The type could not be saved. Please, try again.');
             }
@@ -248,9 +248,9 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
 
-        $postType = $this->Types->get($id);
+        $postType = $this->Model->get($id);
         $this->request->allowMethod(['post', 'delete']);
-        if ($this->Types->delete($postType)) {
+        if ($this->Model->delete($postType)) {
             $this->Flash->success('The post type has been deleted.');
             return $this->redirect(['action' => 'index', 'type' => $_type]);
         } else {
