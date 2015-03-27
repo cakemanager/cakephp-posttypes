@@ -1,39 +1,48 @@
 <?php
-
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 namespace PostTypes\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Utility\Inflector;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
+use Cake\Utility\Inflector;
 
 /**
  * PostTypes component
  */
 class PostTypesComponent extends Component
 {
-
-    public function __construct($registry, array $config = array()) {
-        parent::__construct($registry, $config);
-
-        $this->Controller = $this->_registry->getController();
-    }
-
     /**
      * Default configuration.
-     *
      * @var array
      */
     protected $_defaultConfig = [
         'formFieldOptions' => [
         ],
         'listFieldOptions' => [
-            'hide'   => false,
-            'get'    => false,
+            'hide' => false,
+            'get' => false,
             'before' => '',
-            'after'  => '',
+            'after' => '',
         ],
     ];
+
+    /**
+     * Controller
+     * @var Controller
+     */
     protected $Controller = null;
 
     /**
@@ -42,7 +51,27 @@ class PostTypesComponent extends Component
      */
     protected static $_postTypes = [];
 
-    public function initialize(array $config) {
+    /**
+     * __construct
+     *
+     * @param \Cake\Controller\ComponentRegistry $registry Registry.
+     * @param array $config Configurations.
+     */
+    public function __construct($registry, array $config = array())
+    {
+        parent::__construct($registry, $config);
+
+        $this->Controller = $this->_registry->getController();
+    }
+
+    /**
+     * initialize
+     *
+     * @param array $config Configurations.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
         parent::initialize($config);
 
         $this->Controller = $this->_registry->getController();
@@ -51,7 +80,9 @@ class PostTypesComponent extends Component
     }
 
     /**
-     * Registers a new posttype
+     * register
+     *
+     * Registers a new posttype.
      *
      * @param string $name of the type
      * @param array $options for the type
@@ -62,30 +93,31 @@ class PostTypesComponent extends Component
      * - fields mixed       use an array to define the fields to use, set to false to use the postTypeFields-method in your table-class
      * - alias  string      the alias
      *
+     * @return void
      */
-    public function register($name, $options = []) {
-
+    public function register($name, $options = [])
+    {
         $_options = [
-            'menu'        => false,
-            'model'       => ucfirst($name),
-            'contain'     => [],
+            'menu' => false,
+            'model' => ucfirst($name),
+            'contain' => [],
             'tableFields' => [],
-            'formFields'  => [],
-            'alias'       => $name,
-            'name'        => ucfirst($name),
-            'type'        => Inflector::singularize(ucfirst($name)),
+            'formFields' => [],
+            'alias' => $name,
+            'name' => ucfirst($name),
+            'type' => Inflector::singularize(ucfirst($name)),
             'filters' => [],
-            'actions'     => [
-                'view'   => true,
-                'edit'   => true,
+            'actions' => [
+                'view' => true,
+                'edit' => true,
                 'delete' => true,
-                'add'    => true,
+                'add' => true,
             ],
-            'views'       => [
+            'views' => [
                 'index' => false,
-                'view'  => false,
-                'add'   => false,
-                'edit'  => false,
+                'view' => false,
+                'add' => false,
+                'edit' => false,
             ]
         ];
 
@@ -95,7 +127,7 @@ class PostTypesComponent extends Component
 
         // We have to map the fields-array if it's not false
         if ($options['tableFields']) {
-            $options['tableFields'] = $this->maptableFields($options['tableFields']);
+            $options['tableFields'] = $this->mapTableFields($options['tableFields']);
         }
 
         // We have to map the fields-array if it's not false
@@ -116,13 +148,22 @@ class PostTypesComponent extends Component
     }
 
     /**
-     * Checks if the given posttype is registerd
+     * check
      *
-     * @param string $name of the posttype
-     * @return bool if the type exists
+     * Checks if the given posttype is registerd.
+     *
+     * @param string $name of the posttype.
+     * @param array $options Options.
+     *
+     * ### Options
+     * The following options are available:
+     *
+     * - exception - boolean if the method should return an exception or not.
+     *
+     * @return bool if the type exists.
      */
-    public function check($name, $options = []) {
-
+    public function check($name, $options = [])
+    {
         $_options = [
             'exception' => false,
         ];
@@ -137,18 +178,22 @@ class PostTypesComponent extends Component
             }
         }
 
-        return(key_exists($name, self::$_postTypes));
+        return (key_exists($name, self::$_postTypes));
     }
 
     /**
+     * get
+     *
      * Returns the options of the posttype
      * If the posttype is not set the method will return bool false
      *
-     * @param string $name
-     * @return boolean
+     * If there is no PostType found, a bool `false` will be returned.
+     *
+     * @param string $name Name of the PostType to return.
+     * @return mixed array|bool
      */
-    public function get($name) {
-
+    public function get($name)
+    {
         $name = ucfirst($name);
 
         if ($this->check($name)) {
@@ -158,12 +203,15 @@ class PostTypesComponent extends Component
     }
 
     /**
-     * Maps the given list-field-list
-     * @param type $name
-     * @param type $options
+     * mapTableFields
+     *
+     * Maps the given table-fields and returns a mapped array with usable table-fields.
+     *
+     * @param array $fields The fields to map.
+     * @return array
      */
-    public function maptableFields($fields) {
-
+    public function mapTableFields($fields)
+    {
         $_fields = [];
 
         foreach ($fields as $key => $options) {
@@ -180,12 +228,14 @@ class PostTypesComponent extends Component
     }
 
     /**
-     * Maps the given form-field-list
-     * @param type $fields
-     * @return type
+     * mapFormFields
+     *
+     * Maps the given form-fields and returns a mapped array with usable form-fields.
+     * @param array $fields The fields to map.
+     * @return array
      */
-    public function mapFormFields($fields) {
-
+    public function mapFormFields($fields)
+    {
         $_fields = [];
 
         foreach ($fields as $key => $options) {
@@ -201,29 +251,42 @@ class PostTypesComponent extends Component
         return $_fields;
     }
 
-    protected function _addMenu($name, $options) {
-
-        if (key_exists('prefix', $this->Controller->request->params) AND $this->Controller->request->params['prefix'] == 'admin') {
+    /**
+     * _addMenu
+     *
+     * Gets the name of the PostType and adds a menu-item to the admin's main-menu.
+     *
+     * @param string $name Name of the PostType.
+     * @param array $options Options of the PostType.
+     * @return void
+     */
+    protected function _addMenu($name, $options)
+    {
+        $requstParams = $this->Controller->request->params;
+        if (key_exists('prefix', $requstParams) && $requstParams['prefix'] == 'admin') {
             $this->Controller->Menu->add($options['alias'], [
                 'url' => [
-                    'prefix'     => 'admin',
-                    'plugin'     => 'PostTypes',
+                    'prefix' => 'admin',
+                    'plugin' => 'PostTypes',
                     'controller' => 'PostTypes',
-                    'action'     => 'index',
-                    'type'       => lcfirst($name),
+                    'action' => 'index',
+                    'type' => lcfirst($name),
                 ]
             ]);
         }
     }
 
     /**
-     * Tries to get the posttype from the url.
+     * postTypeFinder
      *
-     * @param string $request
+     * Tries to get the posttype from the url.
+     * Returns an empty string when its not found.
+     *
+     * @param \Cake\Network\Request $request The current request-object.
      * @return string
      */
-    public function postTypeFinder($request) {
-
+    public function postTypeFinder($request)
+    {
         if (key_exists('type', $request->query)) {
             return $request->query['type'];
         }
@@ -234,14 +297,19 @@ class PostTypesComponent extends Component
     }
 
     /**
-     * This method gets the types from the configure-value PostTypes.register.
+     * _registerFromConfigure
      *
+     * This method gets the types from the Configure: `PostTypes.register.*`.
+     *
+     * ### Adding Post-Types via the `Configure`-class
      * You can add an PostType by:
      *
-     * Configure::write('PostTypes.Register.MyType', [*settings0*]);
+     * `Configure::write('PostTypes.Register.MyType', [*settings*]);`
+     *
+     * @return void
      */
-    protected function _registerFromConfigure() {
-
+    protected function _registerFromConfigure()
+    {
         $configure = Configure::read('PostTypes.Register');
 
         if (!is_array($configure)) {
@@ -252,5 +320,4 @@ class PostTypesComponent extends Component
             $this->register($key, $item);
         }
     }
-
 }

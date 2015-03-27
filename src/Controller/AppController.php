@@ -1,14 +1,31 @@
-<?php namespace PostTypes\Controller;
+<?php
+/**
+ * CakeManager (http://cakemanager.org)
+ * Copyright (c) http://cakemanager.org
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) http://cakemanager.org
+ * @link          http://cakemanager.org CakeManager Project
+ * @since         1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+namespace PostTypes\Controller;
 
 use App\Controller\AppController as BaseController;
-use Cake\Utility\Hash;
 
+/**
+ * AppController for PostTypes Plugin
+ *
+ */
 class AppController extends BaseController
 {
     /**
      * The current type table
      *
-     * @var type
+     * @var \Cake\ORM\Table
      */
     public $Types = null;
 
@@ -18,6 +35,11 @@ class AppController extends BaseController
      */
     protected $_type = null;
 
+    /**
+     * Initialize
+     *
+     * @return void
+     */
     public function initialize()
     {
         parent::initialize();
@@ -37,10 +59,10 @@ class AppController extends BaseController
     }
 
     /**
-     * BeforeFilter Event
+     * beforeFilter
      *
-     * @param \Cake\Event\Event $event
-     * @throws \Exception
+     * @param \Cake\Event\Event $event Event.
+     * @return void
      */
     public function beforeFilter(\Cake\Event\Event $event)
     {
@@ -48,9 +70,10 @@ class AppController extends BaseController
     }
 
     /**
-     * BeforeRender Event
+     * beforeRender
      *
-     * @param \Cake\Event\Event $event
+     * @param \Cake\Event\Event $event Event.
+     * @return void
      */
     public function beforeRender(\Cake\Event\Event $event)
     {
@@ -59,24 +82,18 @@ class AppController extends BaseController
         $this->set('postType', $this->Settings);
     }
 
+    /**
+     * isAuthorized
+     *
+     * @param array $user User.
+     * @return bool
+     */
     public function isAuthorized($user)
     {
-
-        $this->Authorizer->action('*', function($auth) {
+        $this->Authorizer->action('*', function ($auth) {
             $auth->allowRole([1]);
         });
 
         return $this->Authorizer->authorize();
-    }
-
-    /**
-     * Checks if an api is allowed
-     *
-     * @return type
-     */
-    protected function _apiAllowed()
-    {
-
-        return $this->Settings['api'];
     }
 }
