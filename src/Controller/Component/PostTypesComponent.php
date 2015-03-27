@@ -59,7 +59,6 @@ class PostTypesComponent extends Component
      * ### OPTIONS
      * - menu   boolean     set if you want a menu-item for the admin-area
      * - model  string      is the model-name to use
-     * - api    boolean     set if you want an automatically api. default false
      * - fields mixed       use an array to define the fields to use, set to false to use the postTypeFields-method in your table-class
      * - alias  string      the alias
      *
@@ -69,7 +68,6 @@ class PostTypesComponent extends Component
         $_options = [
             'menu'        => false,
             'model'       => ucfirst($name),
-            'api'         => false,
             'contain'     => [],
             'tableFields' => [],
             'formFields'  => [],
