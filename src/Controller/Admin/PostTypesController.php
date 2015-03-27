@@ -1,11 +1,10 @@
-<?php
-
-namespace PostTypes\Controller\Admin;
+<?php namespace PostTypes\Controller\Admin;
 
 use PostTypes\Controller\AppController;
 use Cake\Routing\Router;
 use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\Utility\Hash;
 
 /**
  * PostTypes Controller
@@ -14,11 +13,19 @@ use Cake\Core\Configure;
  */
 class PostTypesController extends AppController
 {
-
     public $uses = [];
 
-    public function isAuthorized($user) {
+    public function initialize()
+    {
+        parent::initialize();
 
+        $this->loadComponent('Utils.Search');
+
+        $this->helpers['Utils.Search'] = [];
+    }
+
+    public function isAuthorized($user)
+    {
         $this->Authorizer->action('*', function($auth) {
             $auth->allowRole(1);
         });
@@ -36,7 +43,9 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function index($type = null) {
+    public function index($type = null)
+    {
+        debug($this->Types->schema()->columns());
 
         // setting up an event for the index
         $_event = new Event('Controller.PostTypes.beforeIndex.' . $type, $this, [
@@ -50,7 +59,13 @@ class PostTypesController extends AppController
             ]
         ];
 
-        $this->set('types', $this->paginate($this->Types));
+        foreach ($this->Settings['filters'] as $filter) {
+            $this->Search->addFilter($filter);
+        }
+
+        $query = $this->Search->search($this->Types->find('all'));
+
+        $this->set('types', $this->paginate($query));
 
         // setting up an event for the index
         $_event = new Event('Controller.PostTypes.afterIndex.' . $type, $this, [
@@ -73,7 +88,8 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function view($type = null, $id = null) {
+    public function view($type = null, $id = null)
+    {
 
         // setting up an event for the view
         $_event = new Event('Controller.PostTypes.beforeView.' . $type, $this, [
@@ -105,7 +121,17 @@ class PostTypesController extends AppController
      *
      * @return void
      */
-    public function add($_type = null) {
+    public function add($_type = null)
+    {
+        if (empty($this->Settings['formFields'])) {
+            $columns = $this->Types->schema()->columns();
+            $filter = Configure::read('PostTypes.FilteredColumns');
+            foreach ($columns as $column) {
+                if (!in_array($column, $filter)) {
+                    $this->Settings['formFields'][$column] = [];
+                }
+            }
+        }
 
         // setting up an event for the add
         $_event = new Event('Controller.PostTypes.beforeAdd.' . $_type, $this, [
@@ -144,7 +170,8 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function edit($type = null, $id = null) {
+    public function edit($type = null, $id = null)
+    {
 
         // setting up an event for the edit
         $_event = new Event('Controller.PostTypes.beforeEdit.' . $type, $this, [
@@ -187,7 +214,8 @@ class PostTypesController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException
      */
-    public function delete($type = null, $id = null) {
+    public function delete($type = null, $id = null)
+    {
 
         // setting up an event for the delete
         $_event = new Event('Controller.PostTypes.beforeDelete.' . $type, $this, [
@@ -211,5 +239,4 @@ class PostTypesController extends AppController
         ]);
         $this->eventManager()->dispatch($_event);
     }
-
 }

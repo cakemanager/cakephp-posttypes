@@ -10,6 +10,9 @@ $fields = $postType['tableFields'];
 
     <?= ((!Hash::get($postType, 'actions.add')) ? '' : $this->Html->link('New ' . $postType['type'], ['action' => 'add', 'type' => lcfirst($postType['name'])])) ?>
 
+    <hr>
+    <?= ($searchFilters ? $this->Search->filterForm($searchFilters) : null) ?>
+    
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

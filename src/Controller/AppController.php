@@ -1,13 +1,10 @@
-<?php
-
-namespace PostTypes\Controller;
+<?php namespace PostTypes\Controller;
 
 use App\Controller\AppController as BaseController;
 use Cake\Utility\Hash;
 
 class AppController extends BaseController
 {
-
     /**
      * The current type table
      *
@@ -21,7 +18,8 @@ class AppController extends BaseController
      */
     protected $_type = null;
 
-    public function initialize() {
+    public function initialize()
+    {
         parent::initialize();
 
         // get the type-string
@@ -36,7 +34,6 @@ class AppController extends BaseController
 
         // lets initialize the model too
         $this->Types = $this->loadModel($this->Settings['model']);
-
     }
 
     /**
@@ -45,11 +42,9 @@ class AppController extends BaseController
      * @param \Cake\Event\Event $event
      * @throws \Exception
      */
-    public function beforeFilter(\Cake\Event\Event $event) {
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
         parent::beforeFilter($event);
-
-        $this->set('postType', $this->Settings);
-
     }
 
     /**
@@ -57,11 +52,15 @@ class AppController extends BaseController
      *
      * @param \Cake\Event\Event $event
      */
-    public function beforeRender(\Cake\Event\Event $event) {
+    public function beforeRender(\Cake\Event\Event $event)
+    {
         parent::beforeRender($event);
+
+        $this->set('postType', $this->Settings);
     }
 
-    public function isAuthorized($user) {
+    public function isAuthorized($user)
+    {
 
         $this->Authorizer->action('*', function($auth) {
             $auth->allowRole([1]);
@@ -75,10 +74,9 @@ class AppController extends BaseController
      *
      * @return type
      */
-    protected function _apiAllowed() {
+    protected function _apiAllowed()
+    {
 
         return $this->Settings['api'];
-
     }
-
 }

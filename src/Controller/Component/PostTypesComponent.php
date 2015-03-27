@@ -74,6 +74,7 @@ class PostTypesComponent extends Component
             'alias'       => $name,
             'name'        => ucfirst($name),
             'type'        => Inflector::singularize(ucfirst($name)),
+            'filters' => [],
             'actions'     => [
                 'view'   => true,
                 'edit'   => true,

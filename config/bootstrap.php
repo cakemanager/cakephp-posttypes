@@ -12,3 +12,14 @@ Configure::write('PostTypes.AdminPostTypeViews', [
     'add'          => 'PostTypes./Admin/PostTypes/add',
     'edit'         => 'PostTypes./Admin/PostTypes/edit',
 ]);
+
+/**
+ * When register a PostType and fill no formfields, autmatically all fields will be set.
+ * This array contains columns to ingore always.
+ */
+Configure::write('PostTypes.FilteredColumns', [
+    'created',
+    'modified',
+    'created_by',
+    'modified_by'
+]);
