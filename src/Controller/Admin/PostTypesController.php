@@ -174,10 +174,10 @@ class PostTypesController extends AppController
         if ($this->request->is('post')) {
             $type = $this->Model->newEntity($this->request->data);
             if ($this->Model->save($type)) {
-                $this->Flash->success('The post type has been saved.');
+                $this->Flash->success(__('The {0} has been saved.', [$this->Settings['type']]));
                 return $this->redirect(['action' => 'index', 'type' => $_type]);
             } else {
-                $this->Flash->error('The post type could not be saved. Please, try again.');
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', [$this->Settings['type']]));
             }
         }
         $this->set(compact('type'));
@@ -217,10 +217,10 @@ class PostTypesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $type = $this->Model->patchEntity($type, $this->request->data);
             if ($this->Model->save($type)) {
-                $this->Flash->success('The post type has been saved.');
+                $this->Flash->success(__('The {0} has been saved.', [$this->Settings['type']]));
                 return $this->redirect(['action' => 'index', 'type' => $_type]);
             } else {
-                $this->Flash->error('The type could not be saved. Please, try again.');
+                $this->Flash->error(__('The {0} could not be saved. Please, try again.', [$this->Settings['type']]));
             }
         }
         $this->set(compact('type'));
@@ -258,10 +258,10 @@ class PostTypesController extends AppController
         $postType = $this->Model->get($id);
         $this->request->allowMethod(['post', 'delete']);
         if ($this->Model->delete($postType)) {
-            $this->Flash->success('The post type has been deleted.');
+            $this->Flash->success(__('The {0} has been deleted.', [$this->Settings['type']]));
             return $this->redirect(['action' => 'index', 'type' => $_type]);
         } else {
-            $this->Flash->error('The post type could not be deleted. Please, try again.');
+            $this->Flash->error(__('The {0} could not be deleted. Please, try again.', [$this->Settings['type']]));
             return $this->redirect(['action' => 'index', 'type' => $_type]);
         }
 
