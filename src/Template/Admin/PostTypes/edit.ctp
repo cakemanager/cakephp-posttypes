@@ -1,25 +1,22 @@
 <?php
-//debug($postType);
-
 $fields = $postType['formFields'];
 ?>
 
-    <?= $this->Form->create($type); ?>
-    <fieldset>
-        <legend><?= __('Edit '.$postType['alias']) ?></legend>
-        <?php
-        foreach ($fields as $field => $options) {
+<h3><?= $postType['alias'] ?></h3>
 
-            echo $this->Form->input($field, $options);
+<?= $this->Html->link('All ' . $postType['type'], ['action' => 'index', 'type' => lcfirst($postType['name'])]) ?>
 
-        }
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+<hr>
 
+<?= $this->Form->create($type); ?>
+<fieldset>
+    <legend><?= __('Edit ' . $postType['type']) ?></legend>
+    <?php
+    foreach ($fields as $field => $options) {
 
-
-<?php
-debug($type);
-?>
+        echo $this->Form->input($field, $options);
+    }
+    ?>
+</fieldset>
+<?= $this->Form->button(__('Submit')) ?>
+<?= $this->Form->end() ?>

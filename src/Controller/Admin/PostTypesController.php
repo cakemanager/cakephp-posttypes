@@ -43,6 +43,13 @@ class PostTypesController extends AppController
 
         $this->helpers['Utils.Search'] = [];
     }
+    
+    public function beforeRender(Event $event)
+    {
+        parent::beforeRender($event);
+        
+        $this->set('title', $this->Settings['alias']);
+    }
 
     /**
      * isAuthorized
