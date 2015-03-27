@@ -1,6 +1,8 @@
 PostTypes Plugin for Cake 3.x
 =================
 
+> WARNING: THIS IS AN UNSTABLE VERSION
+
 The PostTypes plugin requires the [CakeManager Plugin](http://github.com/cakemanager/cakephp-cakemanager). We are convinced that you don't have to spend time in building crud-actions for your admin-area. You want to take your time for your front-end (read: application), not your back-end (read: admin-area).
 
 With the PostTypes Plugin you are able to register your types. So, if you use bookmarks in your application you register the bookmark. When you've done this you are able to manage the bookmarks (add, view, edit, delete) in your admin-area.
