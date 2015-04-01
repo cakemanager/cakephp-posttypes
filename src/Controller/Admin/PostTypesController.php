@@ -43,11 +43,11 @@ class PostTypesController extends AppController
 
         $this->helpers['Utils.Search'] = [];
     }
-    
+
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
-        
+
         $this->set('title', $this->Settings['alias']);
     }
 
@@ -91,8 +91,12 @@ class PostTypesController extends AppController
             ]
         ];
 
-        foreach ($this->Settings['filters'] as $filter) {
-            $this->Search->addFilter($filter);
+        foreach ($this->Settings['filters'] as $key => $value) {
+            if (is_array($value)) {
+                $this->Search->addFilter($key, $value);
+            } else {
+                $this->Search->addFilter($value);
+            }
         }
 
         $query = $this->Search->search($this->Model->find('all'));
