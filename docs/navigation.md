@@ -1,0 +1,3 @@
+- [Installation](/docs/posttypes/1.0-docs/installation)
+- Tutorials and Examples
+    - [Quick Start](/docs/posttypes/1.0-docs/tutorials-and-examples/quick-start)
