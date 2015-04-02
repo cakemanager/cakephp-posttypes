@@ -61,7 +61,7 @@ class PostTypesComponent extends Component
     {
         parent::__construct($registry, $config);
 
-        $this->Controller = $this->_registry->getController();
+        $this->setController($this->_registry->getController());
     }
 
     /**
@@ -74,9 +74,42 @@ class PostTypesComponent extends Component
     {
         parent::initialize($config);
 
-        $this->Controller = $this->_registry->getController();
+        $this->setController($this->_registry->getController());
 
         $this->_registerFromConfigure();
+    }
+
+    /**
+     * setController
+     *
+     * Setter for the Controller property.
+     *
+     * @param \Cake\Controller\Controller $controller Controller.
+     * @return void
+     */
+    public function setController($controller)
+    {
+        $this->Controller = $controller;
+    }
+
+    /**
+     * BeforeFilter Event
+     *
+     * This method will check if the `initPostTypes`-method exists in the
+     * `AppController`. That method contains PostTypes to add.
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeFilter($event)
+    {
+        $this->setController($event->subject());
+
+        if ($this->Controller->Manager->prefix('admin')) {
+            if (method_exists($this->Controller, 'initPostTypes')) {
+                $this->Controller->initPostTypes($event);
+            }
+        }
     }
 
     /**

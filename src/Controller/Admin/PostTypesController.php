@@ -44,6 +44,12 @@ class PostTypesController extends AppController
         $this->helpers['Utils.Search'] = [];
     }
 
+    /**
+     * beforeRender event
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);
