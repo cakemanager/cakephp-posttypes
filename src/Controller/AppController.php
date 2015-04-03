@@ -43,7 +43,18 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
+    }
 
+    /**
+     * beforeFilter
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        parent::beforeFilter($event);
+        
         // get the type-string
         $type = $this->PostTypes->postTypeFinder($this->request);
         $this->_type = $type;
@@ -56,17 +67,6 @@ class AppController extends BaseController
 
         // lets initialize the model too
         $this->Model = $this->loadModel($this->Settings['model']);
-    }
-
-    /**
-     * beforeFilter
-     *
-     * @param \Cake\Event\Event $event Event.
-     * @return void
-     */
-    public function beforeFilter(\Cake\Event\Event $event)
-    {
-        parent::beforeFilter($event);
     }
 
     /**
