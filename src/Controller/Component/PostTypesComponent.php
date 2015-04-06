@@ -61,7 +61,7 @@ class PostTypesComponent extends Component
     {
         parent::__construct($registry, $config);
 
-        $this->Controller = $this->_registry->getController();
+        $this->setController($this->_registry->getController());
     }
 
     /**
@@ -74,9 +74,42 @@ class PostTypesComponent extends Component
     {
         parent::initialize($config);
 
-        $this->Controller = $this->_registry->getController();
+        $this->setController($this->_registry->getController());
 
         $this->_registerFromConfigure();
+    }
+
+    /**
+     * setController
+     *
+     * Setter for the Controller property.
+     *
+     * @param \Cake\Controller\Controller $controller Controller.
+     * @return void
+     */
+    public function setController($controller)
+    {
+        $this->Controller = $controller;
+    }
+
+    /**
+     * BeforeFilter Event
+     *
+     * This method will check if the `initPostTypes`-method exists in the
+     * `AppController`. That method contains PostTypes to add.
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeFilter($event)
+    {
+        $this->setController($event->subject());
+
+        if ($this->Controller->Manager->prefix('admin')) {
+            if (method_exists($this->Controller, 'initPostTypes')) {
+                $this->Controller->initPostTypes($event);
+            }
+        }
     }
 
     /**
@@ -146,6 +179,28 @@ class PostTypesComponent extends Component
 
         self::$_postTypes = $list;
     }
+    
+    /**
+     * remove
+     *
+     * Removes the requested PostType.
+     * If $name is empty, the whole list will removed.
+     *
+     * @param string|null $name PostType name
+     * @return void
+     */
+    public function remove($name = null)
+    {
+        $list = self::$_postTypes;
+        
+        unset($list[$name]);
+        
+        if (!$name) {
+            $list = null;
+        }
+        
+        self::$_postTypes = $list;
+    }
 
     /**
      * check
@@ -192,8 +247,12 @@ class PostTypesComponent extends Component
      * @param string $name Name of the PostType to return.
      * @return mixed array|bool
      */
-    public function get($name)
+    public function get($name = null)
     {
+        if (!$name) {
+            return self::$_postTypes;
+        }
+        
         $name = ucfirst($name);
 
         if ($this->check($name)) {

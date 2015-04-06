@@ -28,7 +28,3 @@ Router::prefix('api', function($routes) {
     });
 });
 
-Router::plugin('PostTypes', ['path' => '/posttypes'], function ($routes) {
-    $routes->fallbacks('InflectedRoute');
-});
-

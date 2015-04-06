@@ -15,6 +15,7 @@
 namespace PostTypes\Controller;
 
 use App\Controller\AppController as BaseController;
+use Cake\ORM\TableRegistry;
 
 /**
  * AppController for PostTypes Plugin
@@ -27,7 +28,7 @@ class AppController extends BaseController
      *
      * @var \Cake\ORM\Table
      */
-    public $Types = null;
+    public $Model = null;
 
     /**
      * The current type-name (string)
@@ -43,6 +44,17 @@ class AppController extends BaseController
     public function initialize()
     {
         parent::initialize();
+    }
+
+    /**
+     * beforeFilter
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        parent::beforeFilter($event);
 
         // get the type-string
         $type = $this->PostTypes->postTypeFinder($this->request);
@@ -55,18 +67,7 @@ class AppController extends BaseController
         $this->Settings = $this->PostTypes->get($type);
 
         // lets initialize the model too
-        $this->Types = $this->loadModel($this->Settings['model']);
-    }
-
-    /**
-     * beforeFilter
-     *
-     * @param \Cake\Event\Event $event Event.
-     * @return void
-     */
-    public function beforeFilter(\Cake\Event\Event $event)
-    {
-        parent::beforeFilter($event);
+        $this->Model = $this->loadModel($this->Settings['model']);
     }
 
     /**
@@ -80,20 +81,5 @@ class AppController extends BaseController
         parent::beforeRender($event);
 
         $this->set('postType', $this->Settings);
-    }
-
-    /**
-     * isAuthorized
-     *
-     * @param array $user User.
-     * @return bool
-     */
-    public function isAuthorized($user)
-    {
-        $this->Authorizer->action('*', function ($auth) {
-            $auth->allowRole([1]);
-        });
-
-        return $this->Authorizer->authorize();
     }
 }
