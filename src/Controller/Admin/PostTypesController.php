@@ -45,19 +45,6 @@ class PostTypesController extends AppController
     }
 
     /**
-     * beforeRender event
-     *
-     * @param \Cake\Event\Event $event Event.
-     * @return void
-     */
-    public function beforeRender(Event $event)
-    {
-        parent::beforeRender($event);
-
-        $this->set('title', $this->Settings['alias']);
-    }
-
-    /**
      * isAuthorized
      *
      * @param array $user User.
@@ -75,6 +62,19 @@ class PostTypesController extends AppController
         $this->eventManager()->dispatch($_event);
 
         return $this->Authorizer->authorize();
+    }
+
+    /**
+     * beforeRender event
+     *
+     * @param \Cake\Event\Event $event Event.
+     * @return void
+     */
+    public function beforeRender(Event $event)
+    {
+        parent::beforeRender($event);
+
+        $this->set('title', $this->Settings['alias']);
     }
 
     /**

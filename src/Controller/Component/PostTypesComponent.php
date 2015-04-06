@@ -179,6 +179,28 @@ class PostTypesComponent extends Component
 
         self::$_postTypes = $list;
     }
+    
+    /**
+     * remove
+     *
+     * Removes the requested PostType.
+     * If $name is empty, the whole list will removed.
+     *
+     * @param string|null $name PostType name
+     * @return void
+     */
+    public function remove($name = null)
+    {
+        $list = self::$_postTypes;
+        
+        unset($list[$name]);
+        
+        if (!$name) {
+            $list = null;
+        }
+        
+        self::$_postTypes = $list;
+    }
 
     /**
      * check
@@ -225,8 +247,12 @@ class PostTypesComponent extends Component
      * @param string $name Name of the PostType to return.
      * @return mixed array|bool
      */
-    public function get($name)
+    public function get($name = null)
     {
+        if (!$name) {
+            return self::$_postTypes;
+        }
+        
         $name = ucfirst($name);
 
         if ($this->check($name)) {
