@@ -1,43 +1,44 @@
+[![Build Status](https://travis-ci.org/cakemanager/cakephp-posttypes.svg?branch=1.0)](https://travis-ci.org/cakemanager/cakephp-posttypes)
+[![Coverage Status](https://coveralls.io/repos/cakemanager/cakephp-posttypes/badge.svg?branch=1.0)](https://coveralls.io/r/cakemanager/cakephp-posttypes?branch=1.0)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Latest Stable Version](https://poser.pugx.org/cakemanager/cakephp-posttypes/v/stable.svg)](https://packagist.org/packages/cakemanager/cakephp-posttypes) 
+[![Total Downloads](https://poser.pugx.org/cakemanager/cakephp-posttypes/downloads.svg)](https://packagist.org/packages/cakemanager/cakephp-posttypes)
+
+
 PostTypes Plugin for Cake 3.x
 =================
 
-The PostTypes plugin requires the [CakeManager Plugin](http://github.com/cakemanager/cakephp-cakemanager). We are convinced that you don't have to spend time in building crud-actions for your admin-area. You want to take your time for your front-end (read: application), not your back-end (read: admin-area).
+The PostTypes plugin requires the [CakeManager Plugin](http://github.com/cakemanager/cakephp-cakemanager). We are convinced that you 
+don't have to spend time in building crud-actions for your admin-area. You want to take your time for your front-end (read: application), 
+not your back-end (read: admin-area).
 
-With the PostTypes Plugin you are able to register your types. So, if you use bookmarks in your application you register the bookmark. When you've done this you are able to manage the bookmarks (add, view, edit, delete) in your admin-area.
+With the PostTypes Plugin you are able to register your types. So, if you use bookmarks in your application you register the bookmark. 
+When you've done this you are able to manage the bookmarks (add, view, edit, delete) in your admin-area automatically.
 
-A brief summary:
-
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Register PostTypes](#register-posttypes)
-- [Support](#support)
-- [Contributing](#contributing)
-- [License](#license)
-
-Installation
-------------
-
-Configuration
+Documentation
 -------------
 
-Register PostTypes
-------------------
-
-### Basics
-
-### Options
+For documentation, as well as tutorials, go to http://cakemanager.org/documentations/.
 
 Support
 -------
 
-For bugs and feature requests, please use the [issues](https://github.com/cakemanager/cakephp-cakemanager/issues) section of this repository.
+- [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cakemanager/cakephp-posttypes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Bugs and feature requests for the documentation can be done in the [docs repo](https://github.com/cakemanager/docs/issues)
+- [CakeManager Website](http://cakemanager.org/) - Website of the CakeManager Team. Here you can find everything about us and our plugins.
+
+- [Gitter](https://gitter.im/cakemanager/cakephp-posttypes) - Chat Tool for GitHub to talk about issues and new features.
+
+- [GitHub](https://github.com/cakemanager/cakephp-posttypes/issues) - When there's something wrong, please open a new issue!
+
+- [CakeManager Docs](http://cakemanager.org/docs/1.0/) - Documentation about the CakeManager Plugin.
+
+- [PostTypes Plugin Docs](http://cakemanager.org/docs/posttypes/1.0/) - Documentation about the PostTypes Plugin.
 
 Contributing
 ------------
 
-If you have a good idea for a new feature, feel free to pull or open a new  [issue](https://github.com/cakemanager/cakephp-cakemanager/issues). Pull requests are always more than welcome.
+If you have a good idea for a new feature, feel free to pull or open a new  [issue](https://github.com/cakemanager/cakephp-posttypes/issues). Pull requests are always more than welcome.
 
 License
 -------
@@ -63,4 +64,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
