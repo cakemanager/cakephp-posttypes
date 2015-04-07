@@ -161,7 +161,7 @@ class PostTypesController extends AppController
      * Add method
      *
      * @param string $_type The requested PostType.
-     * @return void
+     * @return void|\Cake\Network\Response
      */
     public function add($_type = null)
     {
@@ -210,7 +210,7 @@ class PostTypesController extends AppController
      *
      * @param string $_type The requested PostType.
      * @param string|null $id Post Type id
-     * @return void
+     * @return void|\Cake\Network\Response
      * @throws \Cake\Network\Exception\NotFoundException
      */
     public function edit($_type = null, $id = null)
@@ -254,8 +254,7 @@ class PostTypesController extends AppController
      *
      * @param string $_type The requested PostType.
      * @param string|null $id Post Type id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @return void|\Cake\Network\Response
      */
     public function delete($_type = null, $id = null)
     {
