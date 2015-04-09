@@ -31,7 +31,7 @@ class PostTypesComponent extends Component
     protected $_defaultConfig = [
         'formFieldOptions' => [
         ],
-        'listFieldOptions' => [
+        'tableFieldOptions' => [
             'hide' => false,
             'get' => false,
             'before' => '',
@@ -274,7 +274,7 @@ class PostTypesComponent extends Component
         $_fields = [];
 
         foreach ($fields as $key => $options) {
-            $_options = $this->config('listFieldOptions');
+            $_options = $this->config('tableFieldOptions');
 
             if (is_array($options)) {
                 $_fields[$key] = array_merge($_options, $options);
