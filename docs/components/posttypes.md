@@ -53,6 +53,9 @@ This option has the same goal as above, but is used for the tableFields.
 Usage
 -----
 
+Usage for the following methods can be done in your `AppController`. Use the `initPostTypes`-method for that. That method
+will be called automatically by the component.
+
 ### Register
 
 Registering PostTypes can be done by the `register`-method. Example:
@@ -121,6 +124,15 @@ The following options are available per field:
 
 The `formFields` array contains a list of fields to use for the form on the add- and edit page. The keys represent the input-names,
 and the values are an array with options like http://book.cakephp.org/3.0/en/views/helpers/form.html#options.
+
+
+#### Registering on the fly
+
+You can register PostTypes on the fly using the `Configure`-class. Example:
+
+        Configure::write('PostTypes.register.Blogs', []);
+
+All options listed above can be set in the empty array.
 
 
 ### Remove
