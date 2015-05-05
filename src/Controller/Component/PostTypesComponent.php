@@ -57,7 +57,7 @@ class PostTypesComponent extends Component
      * @param \Cake\Controller\ComponentRegistry $registry Registry.
      * @param array $config Configurations.
      */
-    public function __construct($registry, array $config = array())
+    public function __construct($registry, array $config = [])
     {
         parent::__construct($registry, $config);
 
