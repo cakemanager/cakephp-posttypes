@@ -78,5 +78,7 @@ class AppController extends Controller
                 'content'
             ]
         ]);
+        
+        $this->PostTypes->register('Posts');
     }
 }

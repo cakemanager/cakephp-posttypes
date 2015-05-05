@@ -28,7 +28,8 @@ class PostTypesControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.post_types.blogs'
+        'plugin.post_types.blogs',
+        'plugin.post_types.posts'
     ];
 
     /**
@@ -118,7 +119,7 @@ class PostTypesControllerTest extends IntegrationTestCase
         $this->assertNotNull($this->viewVariable('types'));
         $this->assertNotNull($this->viewVariable('menu'));
     }
-
+    
     /**
      * testView
      *
@@ -165,6 +166,36 @@ class PostTypesControllerTest extends IntegrationTestCase
         $this->assertNotNull($this->viewVariable('menu'));
 
         $this->assertResponseContains('<form method="post" accept-charset="utf-8" action="/admin/posttypes/blogs/add">');
+        $this->assertResponseContains('<input type="hidden" name="id" id="id">');
+        $this->assertResponseContains('<input type="text" name="title" maxlength="256" id="title">');
+        $this->assertResponseContains('<textarea name="content" id="content" rows="5"></textarea>');
+        $this->assertResponseContains('<button type="submit">Submit</button>');
+        $this->assertResponseContains('</form>');
+    }
+
+    /**
+     * testAddFormFields
+     *
+     * @return void
+     */
+    public function testAddAutoFormFields()
+    {
+        $this->session(['Auth.User' => [
+                'id' => 1,
+                'role_id' => 1,
+                'email' => 'bob@cakemanager.org'
+        ]]);
+        
+        $this->get('/admin/posttypes/posts/add');
+
+        $this->assertResponseOk();
+
+        $this->assertEquals('Posts', $this->viewVariable('title'));
+        $this->assertNotNull($this->viewVariable('postType'));
+        $this->assertInstanceOf('App\Model\Entity\Post', $this->viewVariable('type'));
+        $this->assertNotNull($this->viewVariable('menu'));
+
+        $this->assertResponseContains('<form method="post" accept-charset="utf-8" action="/admin/posttypes/posts/add">');
         $this->assertResponseContains('<input type="hidden" name="id" id="id">');
         $this->assertResponseContains('<input type="text" name="title" maxlength="256" id="title">');
         $this->assertResponseContains('<textarea name="content" id="content" rows="5"></textarea>');
@@ -293,15 +324,15 @@ class PostTypesControllerTest extends IntegrationTestCase
         ]]);
 
         $blogs = TableRegistry::get('Blogs');
-        
+
         $this->assertEquals(10, $blogs->find('all')->count());
-        
+
         $this->delete('/admin/posttypes/blogs/delete/1');
-        
+
         $this->assertResponseSuccess();
-        
+
         $this->assertRedirect('/admin/posttypes/blogs/index');
-        
+
         $this->assertEquals(9, $blogs->find('all')->count());
     }
 }

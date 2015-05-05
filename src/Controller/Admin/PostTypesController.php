@@ -265,17 +265,20 @@ class PostTypesController extends AppController
         $this->eventManager()->dispatch($_event);
 
         $postType = $this->Model->get($id);
+        
         $this->request->allowMethod(['post', 'delete']);
+        
         if ($this->Model->delete($postType)) {
-            $this->Flash->success(__('The {0} has been deleted.', [$this->Settings['type']]));
-            return $this->redirect(['action' => 'index', 'type' => $this->_type]);
-        } else {
             // setting up an event for the delete
             $_event = new Event('Controller.PostTypes.afterDelete.' . $this->_type, $this, [
                 'id' => $id,
             ]);
             $this->eventManager()->dispatch($_event);
-
+            
+            $this->Flash->success(__('The {0} has been deleted.', [$this->Settings['type']]));
+            
+            return $this->redirect(['action' => 'index', 'type' => $this->_type]);
+        } else {
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', [$this->Settings['type']]));
             return $this->redirect(['action' => 'index', 'type' => $this->_type]);
         }
