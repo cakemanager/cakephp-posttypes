@@ -1,3 +1,13 @@
-- [Installation](/docs/posttypes/1.0/installation)
+- Getting started
+    - [Welcome](/docs/posttypes/1.0/index)
+    - [Installation](/docs/posttypes/1.0/installation)
 - Tutorials and Examples
     - [Quick Start](/docs/posttypes/1.0/tutorials-and-examples/quick-start)
+- Components
+    - [PostTypes](/docs/posttypes/1.0/components/posttypes)
+- General
+    - [Callbacks and Events](/docs/posttypes/1.0/general/callbacks-and-events)
+- Contributing
+	- [Documentation](/docs/posttypes/1.0/contributing/documentation)
+	- [Coding Standards](/docs/posttypes/1.0/contributing/coding-standards)
+	- [How To Contribute](/docs/posttypes/1.0/contributing/how-to-contribute)

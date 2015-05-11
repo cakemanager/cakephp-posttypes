@@ -86,7 +86,7 @@ class PostTypesController extends AppController
     public function index($type = null)
     {
         // setting up an event for the index
-        $_event = new Event('Controller.PostTypes.beforeIndex.' . $type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeIndex.' . $this->_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -110,7 +110,7 @@ class PostTypesController extends AppController
         $this->set('types', $this->paginate($query));
 
         // setting up an event for the index
-        $_event = new Event('Controller.PostTypes.afterIndex.' . $type, $this, [
+        $_event = new Event('Controller.PostTypes.afterIndex.' . $this->_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -133,7 +133,7 @@ class PostTypesController extends AppController
     public function view($_type = null, $id = null)
     {
         // setting up an event for the view
-        $_event = new Event('Controller.PostTypes.beforeView.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeView.' . $this->_type, $this, [
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
@@ -144,7 +144,7 @@ class PostTypesController extends AppController
         $this->set('type', $type);
 
         // setting up an event for the view
-        $_event = new Event('Controller.PostTypes.afterView.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.afterView.' . $this->_type, $this, [
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
@@ -161,7 +161,7 @@ class PostTypesController extends AppController
      * Add method
      *
      * @param string $_type The requested PostType.
-     * @return void
+     * @return void|\Cake\Network\Response
      */
     public function add($_type = null)
     {
@@ -176,7 +176,7 @@ class PostTypesController extends AppController
         }
 
         // setting up an event for the add
-        $_event = new Event('Controller.PostTypes.beforeAdd.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeAdd.' . $this->_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -185,7 +185,7 @@ class PostTypesController extends AppController
             $type = $this->Model->newEntity($this->request->data);
             if ($this->Model->save($type)) {
                 $this->Flash->success(__('The {0} has been saved.', [$this->Settings['type']]));
-                return $this->redirect(['action' => 'index', 'type' => $_type]);
+                return $this->redirect(['action' => 'index', 'type' => $this->_type]);
             } else {
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', [$this->Settings['type']]));
             }
@@ -193,7 +193,7 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         // setting up an event for the add
-        $_event = new Event('Controller.PostTypes.afterAdd.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.afterAdd.' . $this->_type, $this, [
         ]);
         $this->eventManager()->dispatch($_event);
 
@@ -210,13 +210,13 @@ class PostTypesController extends AppController
      *
      * @param string $_type The requested PostType.
      * @param string|null $id Post Type id
-     * @return void
+     * @return void|\Cake\Network\Response
      * @throws \Cake\Network\Exception\NotFoundException
      */
     public function edit($_type = null, $id = null)
     {
         // setting up an event for the edit
-        $_event = new Event('Controller.PostTypes.beforeEdit.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeEdit.' . $this->_type, $this, [
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
@@ -228,7 +228,7 @@ class PostTypesController extends AppController
             $type = $this->Model->patchEntity($type, $this->request->data);
             if ($this->Model->save($type)) {
                 $this->Flash->success(__('The {0} has been saved.', [$this->Settings['type']]));
-                return $this->redirect(['action' => 'index', 'type' => $_type]);
+                return $this->redirect(['action' => 'index', 'type' => $this->_type]);
             } else {
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', [$this->Settings['type']]));
             }
@@ -236,7 +236,7 @@ class PostTypesController extends AppController
         $this->set(compact('type'));
 
         // setting up an event for the edit
-        $_event = new Event('Controller.PostTypes.afterEdit.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.afterEdit.' . $this->_type, $this, [
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
@@ -254,31 +254,33 @@ class PostTypesController extends AppController
      *
      * @param string $_type The requested PostType.
      * @param string|null $id Post Type id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @return void|\Cake\Network\Response
      */
     public function delete($_type = null, $id = null)
     {
         // setting up an event for the delete
-        $_event = new Event('Controller.PostTypes.beforeDelete.' . $_type, $this, [
+        $_event = new Event('Controller.PostTypes.beforeDelete.' . $this->_type, $this, [
             'id' => $id,
         ]);
         $this->eventManager()->dispatch($_event);
 
         $postType = $this->Model->get($id);
+        
         $this->request->allowMethod(['post', 'delete']);
+        
         if ($this->Model->delete($postType)) {
+            // setting up an event for the delete
+            $_event = new Event('Controller.PostTypes.afterDelete.' . $this->_type, $this, [
+                'id' => $id,
+            ]);
+            $this->eventManager()->dispatch($_event);
+            
             $this->Flash->success(__('The {0} has been deleted.', [$this->Settings['type']]));
-            return $this->redirect(['action' => 'index', 'type' => $_type]);
+            
+            return $this->redirect(['action' => 'index', 'type' => $this->_type]);
         } else {
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', [$this->Settings['type']]));
-            return $this->redirect(['action' => 'index', 'type' => $_type]);
+            return $this->redirect(['action' => 'index', 'type' => $this->_type]);
         }
-
-        // setting up an event for the delete
-        $_event = new Event('Controller.PostTypes.afterDelete.' . $_type, $this, [
-            'id' => $id,
-        ]);
-        $this->eventManager()->dispatch($_event);
     }
 }
