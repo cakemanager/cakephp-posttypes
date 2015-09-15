@@ -5,8 +5,12 @@
 [![Total Downloads](https://poser.pugx.org/cakemanager/cakephp-posttypes/downloads.svg)](https://packagist.org/packages/cakemanager/cakephp-posttypes)
 
 
-PostTypes Plugin for Cake 3.x
-=================
+[DEPRECATED] PostTypes Plugin for Cake 3.x
+==========================================
+
+> WARNING: THIS PLUGIN IS DEPRECATED. 
+
+> USE https://github.com/cakemanager/cakephp-cakeadmin INSTEAD.
 
 The PostTypes plugin requires the [CakeManager Plugin](http://github.com/cakemanager/cakephp-cakemanager). We are convinced that you 
 don't have to spend time in building crud-actions for your admin-area. You want to take your time for your front-end (read: application), 
